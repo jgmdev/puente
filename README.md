@@ -90,7 +90,7 @@ If you dont want to directly print the code you can call
 $code = $pquery->getExecuteCode(); //Now you can decide what to do with it
 ```
 
-### Silly but working example code
+Silly but working example code
 --------------------------------------------------------------------------------
 
 Here is some sample code that you can copy and paste for testing into a 
