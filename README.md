@@ -1,4 +1,4 @@
-# PQuery
+# :inbox_tray: PQuery :outbox_tray:
 
 A PHP library that facilitates the communication between your php
 code and jQuery/JavaScript code. It serves as a jQuery wrapper that
@@ -22,9 +22,9 @@ are:
 * React
 * Vue.js
 * Polymer
-* (insert more here...)
+* (insert more frameworks here... :trollface:)
 
-Many stuff exists and keeps proliferating, making a web developer life harder
+Many stuff exists and keeps proliferating, making a web developer life harder.
 Knowledge doesn't comes for free and you will have to invest time learning these 
 JavaScript frameworks. While this is yet another project that helps you achieve 
 the same goal, it is based on the solid jQuery library that has been around for 
@@ -41,24 +41,28 @@ For a better idea of what this project has to offer keep reading below.
 
 ## Usage
 
-First you will need to include the jQuery library in your html code.
+First you will need to include the jQuery library in your html code:
+
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 ```
 
 Then you will have to initialize a PQuery instance:
+
 ```php
 $pquery = new \PQuery\PQuery();
 ```
 
 To manipulate a DOM element you will use the **jq()** method which will return
 a JQuery object instance that mimics the jQuery functionality:
+
 ```php
 $pquery->jq("#message")->html("Hello World!");
 ```
 
 You can register events as you would do with jQuery, with the difference that
 you will be able to register a PHP callback:
+
 ```php
 $pquery->jq(".element")->click(function($pquery, $data){
     $pquery->jq(".element")->text("Hello World!");
@@ -67,6 +71,7 @@ $pquery->jq(".element")->click(function($pquery, $data){
 
 You can access other DOM objects like **window**, **console** and **location** 
 with more planned to come:
+
 ```php
 $pquery->jq(".element")->click(function($pquery, $data){
     $pquery->window()->alert("Hello World!");
@@ -75,6 +80,7 @@ $pquery->jq(".element")->click(function($pquery, $data){
 
 Also, when calling JavaScript functions you may want to give it a JavaScript
 object instead of a string, which you can achieve by using the **js:** prefix:
+
 ```php
 $pquery->jq(".element")->click(function($pquery, $data){
     // This will actually show the value of window.innerWidth instead
@@ -85,6 +91,7 @@ $pquery->jq(".element")->click(function($pquery, $data){
 
 When registering an event you can tell it to fetch data from user browser by
 giving a valid JSON string to the **$data** parameter:
+
 ```php
 $pquery->jq(".element")->click(
     function($pquery, $data){
@@ -100,6 +107,7 @@ This will send the client browser window width back to the php callback.
 
 All events like click, dblclick, etc... will now need to be listened by your
 php script, for this all you need to do is call the following method:
+
 ```php
 $pquery->listenRequest();
 ```
@@ -111,12 +119,14 @@ the PQuery code comes from the user browser and respond to it.
 
 After writing your PQuery logic you will have to tell it to generate the 
 JavaScript code:
+
 ```php
 $pquery->executeCode(); //This actually prints the generated code to the document
 ```
 
 If you dont want to directly print the code you can call 
 **getExecuteCode()** instead:
+
 ```php
 $code = $pquery->getExecuteCode(); //Now you can decide what to do with it
 ```
