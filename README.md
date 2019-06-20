@@ -131,60 +131,29 @@ If you dont want to directly print the code you can call
 $code = $pquery->getExecuteCode(); //Now you can decide what to do with it
 ```
 
-### Silly Example Code
+## Examples
 
-Here is some sample code that you can copy and paste for testing into a
-php script file.
+To test the examples you will need PHP CLI to be installed and available on
+your system path, then open a terminal and inside the pquery project folder 
+do the following:
 
-```php
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<div id="message"></div>
-
-<?php
-$pquery = new \PQuery\PQuery();
-
-$pquery->jq("#message")->html("Hello World!")->click(function($pquery, $data){
-    $system = `uname -a`;
-    $pquery->jq("#message")->html($system)
-        ->css(array("position" => "relative"))
-        ->animate(array("top" => "+=20px"))
-    ;
-
-    if($data["width"] > 500)
-    {
-        $pquery->jq("#message")->toggle("slow", function($pquery, $data){
-            if($data["visible"] == "false")
-            {
-                $pquery->jq("#message")->toggle(
-                    "slow",
-                    function($pquery, $data){
-                        $pquery->jq("#message")->html("keep it open!");
-                    },
-                    "{status: 'test'}"
-                );
-            }
-            else
-            {
-                $pquery->jq("#message")->html(":)");
-            }
-        }, "{visible: $('#message').is(':visible')}");
-    }
-}, "{width: $(window).width()}");
-
-$pquery->jq("#message")->css(
-    ["border" => "solid 1px #000", "cursor" => "pointer"]
-);
-
-$pquery->jq("js:window")->resize(function($pquery, $data){
-    $pquery->window()->console()->log($data["width"]);
-}, "{width: $(window).width()}");
-
-$pquery->listenRequest();
-$pquery->executeCode();
+```sh
+cd examples
+./run.sh
 ```
+
+After running the **run.sh** script open your web browser and point
+it to the returned address on your terminal which by default is:
+
+> http://localhost:8383
+
 
 ## Status
 
 The library is still **under development** but it is already proving to be
 useful. Many stuff still needs to be added.
+
+## TODO
+
+Add more examples and use the index.php file as the main starting
+point that list all the available examples.

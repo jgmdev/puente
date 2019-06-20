@@ -393,6 +393,11 @@ class PQuery
     {
         if(isset($_REQUEST["pquery"]))
         {
+            // This only works if output buffering is enabled with ob_start(),
+            // the idea is to Remove previously echoed/html output in order to
+            // return clean json output.
+            ob_clean();
+
             header('Content-Type: application/json; charset=utf-8', true);
             
             $data = array();
