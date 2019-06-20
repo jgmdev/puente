@@ -19,8 +19,8 @@ $pquery = new \PQuery\PQuery();
 $pquery->jq("#message")->html("Hello World!")->click(function($pquery, $data){
     $system = `uname -a`;
     $pquery->jq("#message")->html($system)
-        ->css(array("position" => "relative"))
-        ->animate(array("top" => "+=20px"))
+        ->css(["position" => "relative"])
+        ->animate(["top" => "+=20px"])
     ;
 
     if($data["width"] > 500)

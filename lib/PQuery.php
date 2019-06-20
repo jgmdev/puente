@@ -94,26 +94,26 @@ class PQuery
     {
         if($this->code_buffering)
         {
-            return array(
+            return [
                 "decl" => "\nparents.push(parent_id);"
                     . "parents_data[parent_id] = parent_data;"
                     . "parent_id=$id;"
                     . "parent_data=$data;",
                 "call" => "parents: parents, parents_data: parents_data,"
-            );
+            ];
         }
         else
         {
-            return array(
+            return [
                 "decl" => "\nvar parents=[];"
                     . "var parents_data=[];"
                     . "var parent_id=$id;"
                     . "var parent_data=$data;",
                 "call" => ""
-            );
+            ];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -135,8 +135,8 @@ class PQuery
 
         return $selector = "'"
             . str_replace(
-                array("'", "\n"), 
-                array("\\'", "\\n"), 
+                ["'", "\n"], 
+                ["\\'", "\\n"], 
                 $selector
             ) 
             . "'"
@@ -165,10 +165,10 @@ class PQuery
 
             $this->code[] = "var $varname = jq($selector_parsed);";
             
-            $this->elements[$selector] = array(
+            $this->elements[$selector] = [
                 "var" => $varname,
                 "object" => $jquery
-            );
+            ];
 
             $this->current_element++;
 
@@ -400,7 +400,7 @@ class PQuery
 
             header('Content-Type: application/json; charset=utf-8', true);
             
-            $data = array();
+            $data = [];
             $pquery = $this;
 
             if(isset($_REQUEST["id"]))
@@ -430,7 +430,7 @@ class PQuery
 
                         foreach($_REQUEST["parents"] as $parent)
                         {
-                            $data = array();
+                            $data = [];
 
                             if(
                                 isset($_REQUEST["parents_data"])

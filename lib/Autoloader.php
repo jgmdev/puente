@@ -34,7 +34,7 @@ class Autoloader
      */
     static function register()
     {
-        spl_autoload_register(array('PQuery\Autoloader', 'load'));
+        spl_autoload_register(['PQuery\Autoloader', 'load']);
     }
 }
 

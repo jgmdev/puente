@@ -170,8 +170,8 @@ abstract class ADomObject
 
             $param = "'"
                 . str_replace(
-                    array("'", "\n"), 
-                    array("\\'", "\\n"), 
+                    ["'", "\n"], 
+                    ["\\'", "\\n"], 
                     $param
                 ) 
                 . "'"
@@ -200,8 +200,8 @@ abstract class ADomObject
     {
         $param = "'"
             . str_replace(
-                array("'", "\n"), 
-                array("\\'", "\\n"), 
+                ["'", "\n"], 
+                ["\\'", "\\n"], 
                 $param
             ) 
             . "'"
