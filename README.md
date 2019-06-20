@@ -11,7 +11,7 @@ it returns more JavaScript code to the client browser.
 Today's web development process can be tedious. You can achieve the same goal
 in 1000 different ways, many JavaScript libraries exist that facilitate the
 communication between your frontend and backend. Examples of these libraries
-are: 
+are:
 
 * Angular
 * Aurelia
@@ -25,16 +25,16 @@ are:
 * (insert more frameworks here... :trollface:)
 
 Many stuff exists and keeps proliferating, making a web developer life harder.
-Knowledge doesn't comes for free and you will have to invest time learning these 
-JavaScript frameworks. While this is yet another project that helps you achieve 
-the same goal, it is based on the solid jQuery library that has been around for 
-many years now. jQuery is easy to learn and almost every web developer has 
+Knowledge doesn't comes for free and you will have to invest time learning these
+JavaScript frameworks. While this is yet another project that helps you achieve
+the same goal, it is based on the solid jQuery library that has been around for
+many years now. jQuery is easy to learn and almost every web developer has
 worked with it.
 
 What this project does is ease the communication between the user browser
-and your backend. This project is not intended to remove the need of writing 
-JavaScript code, but to make it easier to interact with the frontend from the 
-backend without needing to implement a Web API for every basic stuff you have 
+and your backend. This project is not intended to remove the need of writing
+JavaScript code, but to make it easier to interact with the frontend from the
+backend without needing to implement a Web API for every basic stuff you have
 to do.
 
 For a better idea of what this project has to offer keep reading below.
@@ -69,7 +69,7 @@ $pquery->jq(".element")->click(function($pquery, $data){
 });
 ```
 
-You can access other DOM objects like **window**, **console** and **location** 
+You can access other DOM objects like **window**, **console** and **location**
 with more planned to come:
 
 ```php
@@ -117,14 +117,14 @@ the PQuery code comes from the user browser and respond to it.
 
 ### Generating the code
 
-After writing your PQuery logic you will have to tell it to generate the 
+After writing your PQuery logic you will have to tell it to generate the
 JavaScript code:
 
 ```php
 $pquery->executeCode(); //This actually prints the generated code to the document
 ```
 
-If you dont want to directly print the code you can call 
+If you dont want to directly print the code you can call
 **getExecuteCode()** instead:
 
 ```php
@@ -133,10 +133,14 @@ $code = $pquery->getExecuteCode(); //Now you can decide what to do with it
 
 ### Silly Example Code
 
-Here is some sample code that you can copy and paste for testing into a 
+Here is some sample code that you can copy and paste for testing into a
 php script file.
 
 ```php
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<div id="message"></div>
+
 <?php
 $pquery = new \PQuery\PQuery();
 
@@ -156,7 +160,7 @@ $pquery->jq("#message")->html("Hello World!")->click(function($pquery, $data){
                     "slow",
                     function($pquery, $data){
                         $pquery->jq("#message")->html("keep it open!");
-                    }, 
+                    },
                     "{status: 'test'}"
                 );
             }
@@ -172,15 +176,12 @@ $pquery->jq("#message")->css(
     ["border" => "solid 1px #000", "cursor" => "pointer"]
 );
 
-$pquery->jq("window")->resize(function($pquery, $data){
+$pquery->jq("js:window")->resize(function($pquery, $data){
     $pquery->window()->console()->log($data["width"]);
 }, "{width: $(window).width()}");
 
 $pquery->listenRequest();
 $pquery->executeCode();
-?>
-
-<div id="message"></div>
 ```
 
 ## Status
