@@ -27,7 +27,7 @@ class JQuery extends DOM\ADomObject
     // Dom functions
 
     /**
-     * Undocumented function
+     * Set the attribute value for the element.
      *
      * @param string $name
      * @param string $value
@@ -37,6 +37,50 @@ class JQuery extends DOM\ADomObject
     public function attr(string $name, string $value): self
     {
         $this->callMethod("attr", $name, $value);
+        
+        return $this;
+    }
+
+    /**
+     * Remove an attribute from each element in the set of matched elements.
+     *
+     * @param string $name
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function removeAttr(string $name): self
+    {
+        $this->callMethod("removeAttr", $name);
+        
+        return $this;
+    }
+
+    /**
+     * Set one or more properties for the set of matched elements. In constrast
+     * to attr this function allows you to change the internal DOM object
+     * properties.
+     *
+     * @param array $properties Eg: ["tagName" => "div"]
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function prop(array $properties): self
+    {
+        $this->callMethod("prop", $properties);
+
+        return $this;
+    }
+
+    /**
+     * Remove a property for the set of matched elements.
+     *
+     * @param string $name
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function removeProp(string $name): self
+    {
+        $this->callMethod("removeProp", $name);
         
         return $this;
     }
@@ -224,6 +268,51 @@ class JQuery extends DOM\ADomObject
     }
 
     /**
+     * Sets the current coordinates of selected element
+     *
+     * @param array $coordinates Can contain position values like top, left,
+     * bottom and right. Eg: ["top" => 100, "left" => 20]
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function offset(array $coordinates): self
+    {
+        $this->callMethod("offset", $coordinates);
+
+        return $this;
+    }
+
+    /**
+     * Set the current vertical position of the scroll bar for each of the 
+     * set of matched elements.
+     *
+     * @param string $value
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function scrollTop(string $value): self
+    {
+        $this->callMethod("scrollTop", $value);
+
+        return $this;
+    }
+
+    /**
+     * Set the current horizontal position of the scroll bar for each of the 
+     * set of matched elements.
+     *
+     * @param string $value
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function scrollLeft(string $value): self
+    {
+        $this->callMethod("scrollLeft", $value);
+
+        return $this;
+    }
+
+    /**
      * Listen for events of the type $event.
      *
      * @param string $event Type of event. Values can be: click, dblclick,
@@ -242,6 +331,34 @@ class JQuery extends DOM\ADomObject
             $callback,
             $data
         );
+
+        return $this;
+    }
+
+    /**
+     * Execute all handlers and behaviors attached to the matched elements 
+     * for the given event type.
+     *
+     * @param string $event A JavaScript event type such as click or submit.
+     * @param string|array|object $param JSON object to feed into
+     * each of the invoked events or a php array/object.
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function trigger(string $event, $param=""): self
+    {
+        if($param != "")
+        {
+            $param = is_string($param) && substr($param, 0, 3) != "js:" ? 
+                "js:$param" : $param
+            ;
+
+            $this->callMethod("trigger", $event, $param);
+        }
+        else
+        {
+            $this->callMethod("trigger", $event);
+        }
 
         return $this;
     }
@@ -416,6 +533,24 @@ class JQuery extends DOM\ADomObject
     }
 
     /**
+     * Bind an event handler to the “select” JavaScript event.
+     *
+     * @param callable $callback
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function select(callable $callback, $data="{}"): self
+    {
+        return $this->on(
+            "select",
+            $callback,
+            $data
+        );
+    }
+
+    /**
      * Event called when the form element receives focus.
      *
      * @param callable $callback
@@ -446,6 +581,42 @@ class JQuery extends DOM\ADomObject
     {
         return $this->on(
             "blur",
+            $callback,
+            $data
+        );
+    }
+
+    /**
+     * Bind an event handler to the "focusin" event.
+     *
+     * @param callable $callback
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function focusin(callable $callback, $data="{}"): self
+    {
+        return $this->on(
+            "focusin",
+            $callback,
+            $data
+        );
+    }
+
+    /**
+     * Bind an event handler to the "focusout" event.
+     *
+     * @param callable $callback
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \PQuery\JQuery
+     */
+    public function focusout(callable $callback, $data="{}"): self
+    {
+        return $this->on(
+            "focusout",
             $callback,
             $data
         );
@@ -782,6 +953,25 @@ class JQuery extends DOM\ADomObject
                 $data
             );
         }
+        
+        return $this;
+    }
+
+    /**
+     * Stop the currently-running animation, remove all queued animations, 
+     * and complete all animations for the matched elements.
+     * 
+     * @param string $queue The name of the queue in which to stop animations.
+     * default is 'fx'.
+     *
+     * @return \PQuery\JQuery
+     */
+    public function finish(string $queue=""): self
+    {
+        if($queue)
+            $this->callMethod("finish", $queue);
+        else
+            $this->callMethod("finish");
         
         return $this;
     }

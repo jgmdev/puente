@@ -31,9 +31,25 @@ class PQuery
      */
     private $window;
 
+    /**
+     * Represents the DOM localStorage element.
+     * @var \PQuery\DOM\LocalStorage
+     */
+    private $local_storage;
+
+    /**
+     * Represents the DOM sessionStorage element.
+     * @var \PQuery\DOM\SessionStorage
+     */
+    private $session_storage;
+
     public function __construct()
     {
         $this->window = new DOM\Window($this);
+
+        $this->local_storage = new DOM\LocalStorage($this);
+
+        $this->session_storage = new DOM\SessionStorage($this);
     }
 
     private function enableBuffer(): void
@@ -191,6 +207,26 @@ class PQuery
     public function window(): DOM\Window
     {
         return $this->window;
+    }
+
+    /**
+     * Gives you access to the localStorage object.
+     *
+     * @return \PQuery\DOM\LocalStorage
+     */
+    public function localStorage(): DOM\LocalStorage
+    {
+        return $this->local_storage;
+    }
+
+    /**
+     * Gives you access to the sessionStorage object.
+     *
+     * @return \PQuery\DOM\SessionStorage
+     */
+    public function sessionStorage(): DOM\SessionStorage
+    {
+        return $this->session_storage;
     }
 
     /**

@@ -121,6 +121,41 @@ class Window extends ADomObject
     }
 
     /**
+     * Opens a new browser window or tab depending on the user browser settings.
+     *
+     * @param string $url The url to open, a blank value will open a new tab.
+     * @param string $target Can be _blank, _parent, _self or _top.
+     * 
+     * @return \PQuery\Window Reference to newly created window.
+     */
+    public function open(string $url, string $target="_blank"): self
+    {
+        $this->paramConvert($url);
+        $this->paramConvert($target);
+
+        $win_name = uniqid("win");
+
+        $this->owner->addCode(
+            $win_name."=".$this->name.".open($url, $target);"
+        );
+
+        $new_window = new self($this->owner, $win_name);
+        
+        return $new_window;
+    }
+
+    /**
+     * Closes the current window.
+     *
+     * @return \PQuery\DOM\Window
+     */
+    public function close(): self
+    {
+        $this->callMethod("close");
+        return $this;
+    }
+
+    /**
      * Opens the Print Dialog Box, which lets the user select preferred 
      * printing options to print the content of the current window.
      *
@@ -129,6 +164,29 @@ class Window extends ADomObject
     public function print(): self
     {
         $this->callMethod("print");
+        return $this;
+    }
+
+    /**
+     * Calls a function after a specified number of milliseconds.
+     *
+     * @param callable $callback
+     * @param int $milliseconds
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \PQuery\Window
+     */
+    public function setTimeout(
+        callable $callback, int $milliseconds=0, $data="{}"
+    ): self
+    {
+        $this->owner->addEventCallback(
+            $this->name.".setTimeout({callback}, $milliseconds);",
+            $callback,
+            $data
+        );
+        
         return $this;
     }
 }
