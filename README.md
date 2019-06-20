@@ -25,13 +25,13 @@ are:
 * (insert more here...)
 
 Many stuff exist and keeps proliferating making a web developer life harder,
-becase after all, knowledge doesn't comes for free. You will have to invest
-time learning these JavaScript libraries. While this is yet another project
-that helps you achieve the same goal it is based on the solid jQuery library
-that has been around for many years now. jQuery is easy to learn and almost
-every web developer has worked with it.
+knowledge doesn't comes for free. You will have to invest time learning these 
+JavaScript frameworks. While this is yet another project that helps you achieve 
+the same goal, it is based on the solid jQuery library that has been around for 
+many years now. jQuery is easy to learn and almost every web developer has 
+worked with it.
 
-What these project does is ease the communication between the user browser
+What this project does is ease the communication between the user browser
 and your backend using the well known jQuery library. This project is not
 intended to remove the need of writing JavaScript code, but to make it easier
 to interact with the frontend from the backend without needing to implement
