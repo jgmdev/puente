@@ -1,0 +1,19 @@
+{
+    "name": "jgmdev/pquery",
+    "description": "A proxy between PHP and jQuery.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jefferson González",
+            "email": "jgmdev@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PQuery\\": "lib/"
+        }
+    }
+}
