@@ -1,6 +1,6 @@
-# :inbox_tray: Puente :outbox_tray:
+# Puente :bridge_at_night:
 
-**Puente** which is the spanish word for "*bridge*" is a PHP library that facilitates the communication between your php code and jQuery/JavaScript 
+**Puente** which is the spanish word for "*bridge*", it is a PHP library that facilitates the communication between your php code and jQuery/JavaScript 
 code. It serves as a jQuery wrapper that generates working JavaScript code. 
 It uses ajax functionality to send all registered browser events back to php 
 for server side processing, then it returns more JavaScript code to the client browser.
