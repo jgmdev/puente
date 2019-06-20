@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Representation of the localStorage DOM object which lets you save
@@ -16,9 +16,9 @@ class LocalStorage extends ADomObject
     /**
      * Constructor.
      *
-     * @param \PQuery\PQuery $owner
+     * @param \Puente\Puente $owner
      */
-    public function __construct(\PQuery\PQuery $owner)
+    public function __construct(\Puente\Puente $owner)
     {
         parent::__construct("localStorage", $owner);
     }
@@ -29,7 +29,7 @@ class LocalStorage extends ADomObject
      * @param string $name
      * @param string $value
      * 
-     * @return \PQuery\DOM\LocalStorage
+     * @return \Puente\DOM\LocalStorage
      */
     public function setItem(string $name, string $value): self
     {
@@ -43,7 +43,7 @@ class LocalStorage extends ADomObject
      *
      * @param string $name
      * 
-     * @return \PQuery\DOM\LocalStorage
+     * @return \Puente\DOM\LocalStorage
      */
     public function removeItem(string $name): self
     {
@@ -55,7 +55,7 @@ class LocalStorage extends ADomObject
     /**
      * Remove all local storage items.
      * 
-     * @return \PQuery\DOM\LocalStorage
+     * @return \Puente\DOM\LocalStorage
      */
     public function clear(): self
     {

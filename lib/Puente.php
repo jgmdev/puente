@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery;
+namespace Puente;
 
 /**
  * Serves as a proxy between PHP and jQuery for easier communication between
@@ -13,7 +13,7 @@ namespace PQuery;
  * for events on the client browser, processing them and sending more javascript 
  * code to the client browser.
  */
-class PQuery
+class Puente
 {
     private $code = [];
     private $code_buffer = [];
@@ -27,19 +27,19 @@ class PQuery
 
     /**
      * Represents the DOM window element.
-     * @var \PQuery\DOM\Window
+     * @var \Puente\DOM\Window
      */
     private $window;
 
     /**
      * Represents the DOM localStorage element.
-     * @var \PQuery\DOM\LocalStorage
+     * @var \Puente\DOM\LocalStorage
      */
     private $local_storage;
 
     /**
      * Represents the DOM sessionStorage element.
-     * @var \PQuery\DOM\SessionStorage
+     * @var \Puente\DOM\SessionStorage
      */
     private $session_storage;
 
@@ -183,7 +183,7 @@ class PQuery
      *
      * @param string $code
      * 
-     * @return \PQuery\PQuery
+     * @return \Puente\Puente
      */
     public function addCode(string $code): self
     {
@@ -202,7 +202,7 @@ class PQuery
     /**
      * Gives you access to the window DOM object.
      *
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function window(): DOM\Window
     {
@@ -212,7 +212,7 @@ class PQuery
     /**
      * Gives you access to the localStorage object.
      *
-     * @return \PQuery\DOM\LocalStorage
+     * @return \Puente\DOM\LocalStorage
      */
     public function localStorage(): DOM\LocalStorage
     {
@@ -222,7 +222,7 @@ class PQuery
     /**
      * Gives you access to the sessionStorage object.
      *
-     * @return \PQuery\DOM\SessionStorage
+     * @return \Puente\DOM\SessionStorage
      */
     public function sessionStorage(): DOM\SessionStorage
     {
@@ -259,7 +259,7 @@ class PQuery
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {pquery: 1, {$parents['call']} id: '$id', data: $data}"
+            . "data: {puente: 1, {$parents['call']} id: '$id', data: $data}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -288,7 +288,7 @@ class PQuery
      * @param string|array|object $data A valid json string or php array/pbject. 
      * For example: "{width: window.innerWidth}"
      * 
-     * @return \PQuery\PQuery
+     * @return \Puente\Puente
      */
     public function addEventCallback(
         string $code, callable $callback, $data="{}"
@@ -312,7 +312,7 @@ class PQuery
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {pquery: 1, {$parents['call']} id: '$id', data: $data}"
+            . "data: {puente: 1, {$parents['call']} id: '$id', data: $data}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -341,7 +341,7 @@ class PQuery
      * @param string|array|object $data A valid json string or php array/pbject. 
      * For example: "{width: window.innerWidth}"
      * 
-     * @return \PQuery\PQuery
+     * @return \Puente\Puente
      */
     public function addElementEvent(
         string $varname, string $type, callable $callback, $data="{}"
@@ -365,7 +365,7 @@ class PQuery
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {pquery: 1, {$parents['call']} id: '$id', element: '$varname', data: $data}"
+            . "data: {puente: 1, {$parents['call']} id: '$id', element: '$varname', data: $data}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -391,7 +391,7 @@ class PQuery
      */
     public function listenRequest(): void
     {
-        if(isset($_REQUEST["pquery"]))
+        if(isset($_REQUEST["puente"]))
         {
             // This only works if output buffering is enabled with ob_start(),
             // the idea is to Remove previously echoed/html output in order to
@@ -401,7 +401,7 @@ class PQuery
             header('Content-Type: application/json; charset=utf-8', true);
             
             $data = [];
-            $pquery = $this;
+            $puente = $this;
 
             if(isset($_REQUEST["id"]))
             {
@@ -411,22 +411,22 @@ class PQuery
                 {
                     $callback = $this->events[$id];
 
-                    $pquery->enableBuffer();
+                    $puente->enableBuffer();
 
                     $callback(
-                        $pquery, 
+                        $puente, 
                         $_REQUEST["data"]
                     );
 
-                    $data["code"] = $pquery->getPlainCode();
+                    $data["code"] = $puente->getPlainCode();
 
-                    $pquery->disableBuffer();
+                    $puente->disableBuffer();
                 }
                 else
                 {
                     if(isset($_REQUEST["parents"]))
                     {
-                        $pquery->enableBuffer();
+                        $puente->enableBuffer();
 
                         foreach($_REQUEST["parents"] as $parent)
                         {
@@ -442,29 +442,29 @@ class PQuery
                             }
 
                             $this->events[$parent](
-                                $pquery, $data
+                                $puente, $data
                             );
                         }
 
-                        $pquery->clearBuffer();
+                        $puente->clearBuffer();
 
                         if(isset($this->events[$id]))
                         {
                             $callback = $this->events[$id];
 
                             $callback(
-                                $pquery, 
+                                $puente, 
                                 $_REQUEST["data"]
                             );
 
-                            $data["code"] = $pquery->getPlainCode();
+                            $data["code"] = $puente->getPlainCode();
                         }
                         else
                         {
                             $data["error"] = "No child id registered.";
                         }
 
-                        $pquery->disableBuffer();
+                        $puente->disableBuffer();
                     }
                     else
                     {

@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Representation of the location DOM object.
@@ -15,11 +15,11 @@ class Location extends ADomObject
     /**
      * Constructor.
      *
-     * @param \PQuery\PQuery $owner
+     * @param \Puente\Puente $owner
      * @param string $name Default is location but you may override this
      * to get the location object of a specific element eg: myWindow.location
      */
-    public function __construct(\PQuery\PQuery $owner, string $name="location")
+    public function __construct(\Puente\Puente $owner, string $name="location")
     {
         parent::__construct($name, $owner);
     }
@@ -30,7 +30,7 @@ class Location extends ADomObject
      * 
      * @param string $url
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function assign(string $url): self
     {
@@ -45,7 +45,7 @@ class Location extends ADomObject
      * @param bool $force_get If false (default) reloads from browser cache, 
      * if true downloads a fresh copy.
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function reload(bool $force_get=false): self
     {   
@@ -61,7 +61,7 @@ class Location extends ADomObject
      * 
      * @param string $url
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function replace(string $url): self
     {
@@ -75,7 +75,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function hash(string $value): self
     {
@@ -89,7 +89,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function host(string $value): self
     {
@@ -103,7 +103,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function hostname(string $value): self
     {
@@ -117,7 +117,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function href(string $value): self
     {
@@ -131,7 +131,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function pathname(string $value): self
     {
@@ -145,7 +145,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function port(string $value): self
     {
@@ -160,7 +160,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function protocol(string $value): self
     {
@@ -174,7 +174,7 @@ class Location extends ADomObject
      * 
      * @param string $value
      *
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function search(string $value): self
     {

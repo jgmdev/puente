@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Representation of the sessionStorage DOM object which lets you save
@@ -18,9 +18,9 @@ class SessionStorage extends LocalStorage
     /**
      * Constructor.
      *
-     * @param \PQuery\PQuery $owner
+     * @param \Puente\Puente $owner
      */
-    public function __construct(\PQuery\PQuery $owner)
+    public function __construct(\Puente\Puente $owner)
     {
         $this->name = "sessionStorage";
         $this->owner = $owner;

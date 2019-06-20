@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Contains functionality useful for all javascript DOM objects.
@@ -14,7 +14,7 @@ abstract class ADomObject
 {
     /**
      * Owner where generated code will be assigned.
-     * @var \PQuery\PQuery
+     * @var \Puente\Puente
      */
     protected $owner = null;
 
@@ -24,7 +24,7 @@ abstract class ADomObject
      */
     protected $name = "";
     
-    public function __construct(string $name, \PQuery\PQuery $owner)
+    public function __construct(string $name, \Puente\Puente $owner)
     {
         $this->name = $name;
         $this->owner = $owner;

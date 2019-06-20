@@ -5,7 +5,7 @@ chdir(__DIR__);
 require "../lib/Autoloader.php";
 
 // We need this if outputting html code or anything else before the
-// $pquery->listenRequest() is called
+// $puente->listenRequest() is called
 ob_start();
 
 ?>
@@ -14,44 +14,44 @@ ob_start();
 <div id="message"></div>
 
 <?php
-$pquery = new \PQuery\PQuery();
+$puente = new \Puente\Puente();
 
-$pquery->jq("#message")->html("Hello World!")->click(function($pquery, $data){
+$puente->jq("#message")->html("Hello World!")->click(function($puente, $data){
     $system = `uname -a`;
-    $pquery->jq("#message")->html($system)
+    $puente->jq("#message")->html($system)
         ->css(["position" => "relative"])
         ->animate(["top" => "+=20px"])
     ;
 
     if($data["width"] > 500)
     {
-        $pquery->jq("#message")->toggle("slow", function($pquery, $data){
+        $puente->jq("#message")->toggle("slow", function($puente, $data){
             if($data["visible"] == "false")
             {
-                $pquery->jq("#message")->toggle(
+                $puente->jq("#message")->toggle(
                     "slow",
-                    function($pquery, $data){
-                        $pquery->jq("#message")->html("keep it open!");
+                    function($puente, $data){
+                        $puente->jq("#message")->html("keep it open!");
                     },
                     "{status: 'test'}"
                 );
             }
             else
             {
-                $pquery->jq("#message")->html(":)");
+                $puente->jq("#message")->html(":)");
             }
         }, "{visible: $('#message').is(':visible')}");
     }
 }, "{width: $(window).width()}");
 
-$pquery->jq("#message")->css(
+$puente->jq("#message")->css(
     ["border" => "solid 1px #000", "cursor" => "pointer"]
 );
 
-$pquery->jq("js:window")->resize(function($pquery, $data){
-    $pquery->window()->console()->log($data["width"]);
+$puente->jq("js:window")->resize(function($puente, $data){
+    $puente->window()->console()->log($data["width"]);
 }, "{width: $(window).width()}");
 
-$pquery->listenRequest();
+$puente->listenRequest();
 
-$pquery->executeCode();
+$puente->executeCode();

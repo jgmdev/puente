@@ -2,13 +2,13 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery;
+namespace Puente;
 
 /**
- * Autoloader for PQuery.
+ * Autoloader for Puente.
  */
 class Autoloader
 {
@@ -34,7 +34,7 @@ class Autoloader
      */
     static function register()
     {
-        spl_autoload_register(['PQuery\Autoloader', 'load']);
+        spl_autoload_register(['Puente\Autoloader', 'load']);
     }
 }
 

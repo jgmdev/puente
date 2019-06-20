@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Representation of the console DOM object which is useful to pring
@@ -16,11 +16,11 @@ class Console extends ADomObject
     /**
      * Constructor.
      *
-     * @param \PQuery\PQuery $owner
+     * @param \Puente\Puente $owner
      * @param string $name Default is console but you may override this
      * to get the console object of a specific element eg: myWindow.console
      */
-    public function __construct(\PQuery\PQuery $owner, string $name="console")
+    public function __construct(\Puente\Puente $owner, string $name="console")
     {
         parent::__construct($name, $owner);
     }
@@ -33,7 +33,7 @@ class Console extends ADomObject
      * [["name" => "john", age => 10], ["name" => "Smith", age => 4]].
      * @param string $message The message to display with the element.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function assert(
         $element, string $message=""
@@ -61,7 +61,7 @@ class Console extends ADomObject
      * 
      * @param string $message The message to write.
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function error(string $message): self
     {
@@ -75,7 +75,7 @@ class Console extends ADomObject
      *
      * @param string $message The message or object to write.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function info(string $message): self
     {
@@ -89,7 +89,7 @@ class Console extends ADomObject
      *
      * @param string $message The message or object to write.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function log(string $message): self
     {
@@ -103,7 +103,7 @@ class Console extends ADomObject
      *
      * @param string $message The message or object to write.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function warn(string $message): self
     {
@@ -116,7 +116,7 @@ class Console extends ADomObject
      * Clears the debugging console. and writes a message in the console: 
      * "Console was cleared".
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function clear(): self
     {
@@ -132,7 +132,7 @@ class Console extends ADomObject
      * @param string $label If set the method counts the number of times 
      * console.count() has been called with this label.
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function count(string $label=""): self
     {
@@ -154,7 +154,7 @@ class Console extends ADomObject
      *
      * @param string $label If set the messages are grouped by the given label.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function group(string $label=""): self
     {
@@ -175,7 +175,7 @@ class Console extends ADomObject
      *
      * @param string $label If set the messages are grouped by the given label.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function groupCollapsed(string $label=""): self
     {
@@ -194,7 +194,7 @@ class Console extends ADomObject
     /**
      * Ends a previously started messages group.
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function groupEnd(): self
     {
@@ -212,7 +212,7 @@ class Console extends ADomObject
      * @param array $columnNames Array of the columns to display, for example:
      * ["age"] which will display only the age column.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function table(
         $element, array $columnNames=[]
@@ -240,7 +240,7 @@ class Console extends ADomObject
      *
      * @param string $label If set the timer is identified as label.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function time(string $label=""): self
     {
@@ -261,7 +261,7 @@ class Console extends ADomObject
      *
      * @param string $label If set the timer is identified as label.
      * 
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function timeEnd(string $label=""): self
     {
@@ -282,7 +282,7 @@ class Console extends ADomObject
      * 
      * @param string $label If set the trace is identified as the given label.
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function trace(string $label=""): self
     {

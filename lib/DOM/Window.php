@@ -2,10 +2,10 @@
 /**
  * @author Jefferson González
  * @license MIT
- * @link https://github.com/jgmdev/pquery Source code.
+ * @link https://github.com/jgmdev/puente Source code.
  */
 
-namespace PQuery\DOM;
+namespace Puente\DOM;
 
 /**
  * Represets the javascript window object.
@@ -14,24 +14,24 @@ class Window extends ADomObject
 {
     /**
      * Access to the window console.
-     * @var \PQuery\DOM\Console
+     * @var \Puente\DOM\Console
      */
     private $console;
 
     /**
      * Access to the window location.
-     * @var \PQuery\DOM\Location
+     * @var \Puente\DOM\Location
      */
     private $location;
     
     /**
      * Constructor
      *
-     * @param \PQuery\PQuery $owner
+     * @param \Puente\Puente $owner
      * @param string $name Default is window but you may override this
      * to get a specific window object eg: myWindow
      */
-    public function __construct(\PQuery\PQuery $owner, string $name="window")
+    public function __construct(\Puente\Puente $owner, string $name="window")
     {
         parent::__construct($name, $owner);
 
@@ -44,7 +44,7 @@ class Window extends ADomObject
      * Gives you access to the browser console which provides methods 
      * for logging information to the browser's console
      *
-     * @return \PQuery\DOM\Console
+     * @return \Puente\DOM\Console
      */
     public function console(): Console
     {
@@ -54,7 +54,7 @@ class Window extends ADomObject
     /**
      * Gives you access to the location object.
      * 
-     * @return \PQuery\DOM\Location
+     * @return \Puente\DOM\Location
      */
     public function location(): Location
     {
@@ -66,7 +66,7 @@ class Window extends ADomObject
      *
      * @param string $message
      * 
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function alert(string $message): self
     {
@@ -79,9 +79,9 @@ class Window extends ADomObject
      * Generates a confirm dialog, and calls the given server side callback.
      *
      * @param string $message
-     * @param callable $callback function(PQuery\PQuery, array{"confirm" => bool})
+     * @param callable $callback function(Puente\Puente, array{"confirm" => bool})
      * 
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function confirm(string $message, callable $callback): self
     {
@@ -98,11 +98,11 @@ class Window extends ADomObject
      * Opens a prompt dialog to ask user for input.
      *
      * @param string $message
-     * @param callable $callback function(PQuery\PQuery, array{"input" => string})
+     * @param callable $callback function(Puente\Puente, array{"input" => string})
      * @param string $default_value The default value of the prompt displayed 
      * to the user.
      * 
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function prompt(
         string $message, callable $callback, string $default_value=""
@@ -126,7 +126,7 @@ class Window extends ADomObject
      * @param string $url The url to open, a blank value will open a new tab.
      * @param string $target Can be _blank, _parent, _self or _top.
      * 
-     * @return \PQuery\Window Reference to newly created window.
+     * @return \Puente\Window Reference to newly created window.
      */
     public function open(string $url, string $target="_blank"): self
     {
@@ -147,7 +147,7 @@ class Window extends ADomObject
     /**
      * Closes the current window.
      *
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function close(): self
     {
@@ -159,7 +159,7 @@ class Window extends ADomObject
      * Opens the Print Dialog Box, which lets the user select preferred 
      * printing options to print the content of the current window.
      *
-     * @return \PQuery\DOM\Window
+     * @return \Puente\DOM\Window
      */
     public function print(): self
     {
@@ -175,7 +175,7 @@ class Window extends ADomObject
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      * 
-     * @return \PQuery\Window
+     * @return \Puente\Window
      */
     public function setTimeout(
         callable $callback, int $milliseconds=0, $data="{}"
