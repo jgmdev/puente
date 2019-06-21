@@ -26,6 +26,7 @@ class Puente
     private $current_element = 1;
     private $instance = 0;
     private $run_first_time = true;
+    private $debug_mode = false;
 
     private static $next_instance = 1;
 
@@ -53,6 +54,9 @@ class Puente
      */
     private $puente_storage;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->instance = self::$next_instance;
@@ -67,7 +71,13 @@ class Puente
         $this->puente_storage = new DOM\PuenteStorage($this);
     }
 
-    private function enableBuffer(): void
+    /**
+     * Starts a new buffer to store generated code. This is used when 
+     * generating code inside callbacks.
+     *
+     * @return void
+     */
+    private function createBuffer(): void
     {
         $level = $this->code_buffer_next_level;
         $this->code_buffer_level = $level;
@@ -78,7 +88,12 @@ class Puente
         $this->code_buffer_next_level++;
     }
 
-    private function disableBuffer(): void
+    /**
+     * Destroy previously created buffer with createBuffer().
+     *
+     * @return void
+     */
+    private function destroyBuffer(): void
     {
         $level = $this->code_buffer_level;
         unset($this->code_buffer[$level]);
@@ -96,6 +111,11 @@ class Puente
         }
     }
 
+    /**
+     * Clears the active buffer.
+     *
+     * @return void
+     */
     private function clearBuffer(): void
     {
         if($this->code_buffering)
@@ -105,7 +125,16 @@ class Puente
         }
     }
 
-    private function getParents($id, $data="{}"): array
+    /**
+     * Helper to generate the code needed to retrieve the apropiate parent
+     * for a callback. This is needed to execute all parents that will then
+     * create the child callback.
+     *
+     * @param int $id
+     * @param string $data
+     * @return void
+     */
+    private function getParents(int $id, string $data="{}"): array
     {
         if($this->code_buffering)
         {
@@ -159,6 +188,20 @@ class Puente
     }
 
     /**
+     * Logs in browser console the javascript code sent by callbacks.
+     *
+     * @param string $code
+     * 
+     * @return \Puente\Puente
+     */
+    public function enableDebug(): self
+    {
+        $this->debug_mode = true;
+
+        return $this;
+    }
+
+    /**
      * Access a jQuery instance for the given selector.
      *
      * @param string $selector A valid jQuery selector string or dom object
@@ -178,7 +221,7 @@ class Puente
                 $varname, $this
             );
 
-            $this->code[] = "var $varname = jq($selector_parsed);";
+            $this->addCode("var $varname = jq($selector_parsed);");
             
             $this->elements[$selector] = [
                 "var" => $varname,
@@ -280,6 +323,12 @@ class Puente
         $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
+        $debug = "";
+        if($this->debug_mode)
+        {
+            $debug .= "console.log(data.code);";
+        }
+
         $code = $parents["decl"]
             . "jq.ajax("
             . "{"
@@ -295,6 +344,7 @@ class Puente
             . "alert(data.error);"
             . "}else{"
             . "eval(data.code);"
+            . $debug
             . "}"
             . "}).fail(function(data){"
             . "alert('Error Occurred');"
@@ -336,6 +386,12 @@ class Puente
         $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
+        $debug = "";
+        if($this->debug_mode)
+        {
+            $debug .= "console.log(data.code);";
+        }
+
         $callback_code = "function(event){"
             . $parents["decl"]
             . "jq.ajax("
@@ -352,6 +408,7 @@ class Puente
             . "alert(data.error);"
             . "}else{"
             . "eval(data.code);"
+            . $debug
             . "}"
             . "}).fail(function(data){"
             . "alert('Error Occurred');"
@@ -393,6 +450,12 @@ class Puente
         $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
+        $debug = "";
+        if($this->debug_mode)
+        {
+            $debug .= "console.log(data.code);";
+        }
+
         $code = "$varname.on('$type', function(event){"
             . $parents["decl"]
             . "jq.ajax("
@@ -409,6 +472,7 @@ class Puente
             . "alert(data.error);"
             . "}else{"
             . "eval(data.code);"
+            . $debug
             . "}"
             . "}).fail(function(data){"
             . "alert('Error Occurred');"
@@ -452,7 +516,7 @@ class Puente
                 {
                     $callback = $this->events[$id];
 
-                    $puente->enableBuffer();
+                    $puente->createBuffer();
 
                     $callback(
                         $puente, 
@@ -461,13 +525,13 @@ class Puente
 
                     $data["code"] = $puente->getPlainCode();
 
-                    $puente->disableBuffer();
+                    $puente->destroyBuffer();
                 }
                 else
                 {
                     if(isset($_REQUEST["parents"]))
                     {
-                        $puente->enableBuffer();
+                        $puente->createBuffer();
 
                         foreach($_REQUEST["parents"] as $parent)
                         {
@@ -505,7 +569,7 @@ class Puente
                             $data["error"] = "No child id registered.";
                         }
 
-                        $puente->disableBuffer();
+                        $puente->destroyBuffer();
                     }
                     else
                     {
