@@ -1,9 +1,12 @@
 # Puente :bridge_at_night:
 
-**Puente** which is the spanish word for "*bridge*", is a PHP library that facilitates the communication between your php code and jQuery/JavaScript 
-code. It serves as a jQuery wrapper that generates working JavaScript code. 
-It uses ajax functionality to send all registered browser events back to php 
-for server side processing, then it returns more JavaScript code to the client browser.
+**Puente** which is the spanish word for "*bridge*" (you can hear the
+pronunciation [here](https://www.howtopronounce.com/spanish/puente/)), is a 
+PHP library that facilitates the communication between your php code and 
+jQuery/JavaScript code. It serves as a jQuery wrapper that generates working 
+JavaScript code. It uses ajax functionality to send all registered browser 
+events back to php for server side processing, then it returns more JavaScript 
+code to the client browser.
 
 ## Why?
 
@@ -59,8 +62,8 @@ a JQuery object instance that mimics the jQuery functionality:
 $puente->jq("#message")->html("Hello World!");
 ```
 
-You can register events as you would do with jQuery, with the difference that
-you will be able to register a PHP callback:
+You can register events as you would do with jQuery, with the **difference** that
+you will be able to register a **PHP callback!**:
 
 ```php
 $puente->jq(".element")->click(function($puente, $data){
@@ -68,8 +71,9 @@ $puente->jq(".element")->click(function($puente, $data){
 });
 ```
 
-You can access other DOM objects like **window**, **console** and **location**
-with more planned to come:
+You can access other DOM objects like **window**, **console**, **location**,
+**localStorage** and **sessionStorage**, the possibilities for more are
+endless:
 
 ```php
 $puente->jq(".element")->click(function($puente, $data){
