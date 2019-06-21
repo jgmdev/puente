@@ -122,24 +122,31 @@ class Window extends ADomObject
 
     /**
      * Opens a new browser window or tab depending on the user browser settings.
+     * Stores the window object in the puente storage for later manipulation.
      *
      * @param string $url The url to open, a blank value will open a new tab.
      * @param string $target Can be _blank, _parent, _self or _top.
+     * @param string $varname An explicit name for the variable that will store
+     * the new opened window.
      * 
      * @return \Puente\Window Reference to newly created window.
      */
-    public function open(string $url, string $target="_blank"): self
+    public function open(
+        string $url, string $target="_blank", string $varname=""
+    ): self
     {
         $this->paramConvert($url);
         $this->paramConvert($target);
 
-        $win_name = uniqid("win");
+        $varname = $varname == "" ? uniqid("win") : $varname;
 
         $this->owner->addCode(
-            $win_name."=".$this->name.".open($url, $target);"
+            $varname."=".$this->name.".open($url, $target);"
         );
 
-        $new_window = new self($this->owner, $win_name);
+        $this->owner->puenteStorage()->insertVar($varname);
+
+        $new_window = new self($this->owner, $varname);
         
         return $new_window;
     }
@@ -168,24 +175,113 @@ class Window extends ADomObject
     }
 
     /**
-     * Calls a function after a specified number of milliseconds.
+     * Calls a function after a specified number of milliseconds. This function 
+     * will add a 'timeout' element to the $data object sent to the callback
+     * that contains the variable name which holds the timer id.
      *
      * @param callable $callback
      * @param int $milliseconds
+     * @param string $varname An explicit name for the variable that will store
+     * the timer id, if empty it will generate one for you.
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      * 
      * @return \Puente\Window
      */
     public function setTimeout(
-        callable $callback, int $milliseconds=0, $data="{}"
+        callable $callback, int $milliseconds=0, string $varname="", $data="{}"
     ): self
     {
+        $varname = $varname == "" ? uniqid("timeout") : $varname;
+
+        $this->appendData($data, ["timeout" => $varname]);
+        
         $this->owner->addEventCallback(
-            $this->name.".setTimeout({callback}, $milliseconds);",
+            "var $varname = {$this->name}.setTimeout("
+                . "{callback}, $milliseconds"
+                . ");",
             $callback,
             $data
         );
+
+        $this->owner->puenteStorage()->insertVar($varname);
+        
+        return $this;
+    }
+
+    /**
+     * Calls a function at specified intervals in milliseconds. This function 
+     * will add an 'interval' element to the $data object sent to the callback
+     * that contains the variable name whichs holds timer id, this way
+     * you can use clearInterval from within the callback in case you want
+     * to stop the interval.
+     *
+     * @param callable $callback
+     * @param int $milliseconds
+     * @param string $varname An explicit name for the variable that will store
+     * the timer id, if empty it will generate one for you.
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \Puente\Window
+     */
+    public function setInterval(
+        callable $callback, int $milliseconds=0, string $varname="", $data="{}"
+    ): self
+    {
+        $varname = $varname == "" ? uniqid("interval") : $varname;
+
+        $this->appendData($data, ["interval" => $varname]);
+        
+        $this->owner->addEventCallback(
+            "var $varname = {$this->name}.setInterval("
+                . "{callback}, $milliseconds"
+                . ");",
+            $callback,
+            $data
+        );
+
+        $this->owner->puenteStorage()->insertVar($varname);
+        
+        return $this;
+    }
+
+    /**
+     * Stops a timer started with setTimeout().
+     *
+     * $param string $varname
+     * 
+     * @return \Puente\Window
+     */
+    public function clearTimeout(string $varname): self
+    {
+        $this->owner->addCode(
+            "clearTimeout("
+                . $this->owner->puenteStorage()->getVarInstance($varname)
+                . ");"
+        );
+
+        $this->owner->puenteStorage()->removeVar($varname);
+        
+        return $this;
+    }
+
+    /**
+     * Stops a timer started with setInterval().
+     *
+     * $param string $varname
+     * 
+     * @return \Puente\Window
+     */
+    public function clearInterval(string $varname): self
+    {
+        $this->owner->addCode(
+            "clearInterval("
+                . $this->owner->puenteStorage()->getVarInstance($varname)
+                . ");"
+        );
+
+        $this->owner->puenteStorage()->removeVar($varname);
         
         return $this;
     }

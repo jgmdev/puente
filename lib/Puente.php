@@ -24,6 +24,10 @@ class Puente
     private $current_event = 1;
     private $elements = [];
     private $current_element = 1;
+    private $instance = 0;
+    private $run_first_time = true;
+
+    private static $next_instance = 1;
 
     /**
      * Represents the DOM window element.
@@ -43,13 +47,24 @@ class Puente
      */
     private $session_storage;
 
+    /**
+     * Represents the DOM localStorage element.
+     * @var \Puente\DOM\PuenteStorage
+     */
+    private $puente_storage;
+
     public function __construct()
     {
+        $this->instance = self::$next_instance;
+        self::$next_instance++;
+
         $this->window = new DOM\Window($this);
 
         $this->local_storage = new DOM\LocalStorage($this);
 
         $this->session_storage = new DOM\SessionStorage($this);
+
+        $this->puente_storage = new DOM\PuenteStorage($this);
     }
 
     private function enableBuffer(): void
@@ -230,6 +245,16 @@ class Puente
     }
 
     /**
+     * Gives you access to the Puente array object.
+     *
+     * @return \Puente\DOM\PuenteStorage
+     */
+    public function puenteStorage(): DOM\PuenteStorage
+    {
+        return $this->puente_storage;
+    }
+
+    /**
      * Generates an ajax callback back to the server.
      *
      * @param string $type
@@ -252,6 +277,7 @@ class Puente
             $data = json_encode($data);
         }
 
+        $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
         $code = $parents["decl"]
@@ -259,7 +285,10 @@ class Puente
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {puente: 1, {$parents['call']} id: '$id', data: $data}"
+            . "data: {"
+            . "puente: $instance, {$parents['call']} "
+            . "id: '$id', data: $data"
+            . "}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -304,6 +333,7 @@ class Puente
             $data = json_encode($data);
         }
 
+        $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
         $callback_code = "function(event){"
@@ -312,7 +342,10 @@ class Puente
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {puente: 1, {$parents['call']} id: '$id', data: $data}"
+            . "data: {"
+            . "puente: $instance, {$parents['call']} "
+            . "id: '$id', data: $data"
+            . "}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -357,6 +390,7 @@ class Puente
             $data = json_encode($data);
         }
 
+        $instance = $this->instance;
         $parents = $this->getParents($id, $data);
 
         $code = "$varname.on('$type', function(event){"
@@ -365,7 +399,10 @@ class Puente
             . "{"
             . "url: window.location.pathname, "
             . "dataType: 'json', "
-            . "data: {puente: 1, {$parents['call']} id: '$id', element: '$varname', data: $data}"
+            . "data: {"
+            . "puente: $instance, {$parents['call']} id: '$id', "
+            . "element: '$varname', data: $data"
+            . "}"
             . "}"
             . ").done(function( data ) {"
             . "if(data.error){"
@@ -391,7 +428,11 @@ class Puente
      */
     public function listenRequest(): void
     {
-        if(isset($_REQUEST["puente"]))
+        if(
+            isset($_REQUEST["puente"]) 
+            && 
+            $_REQUEST["puente"] == $this->instance
+        )
         {
             // This only works if output buffering is enabled with ob_start(),
             // the idea is to Remove previously echoed/html output in order to
@@ -484,6 +525,16 @@ class Puente
     }
 
     /**
+     * Get the instance ID of the puente.
+     *
+     * @return integer
+     */
+    public function getInstanceID(): int
+    {
+        return $this->instance;
+    }
+
+    /**
      * Gets the generated code.
      *
      * @return string
@@ -493,8 +544,20 @@ class Puente
         $code = "";
         if(!$this->code_buffering)
         {
+            // Initialize global storage of variables.
+            $storage = "";
+            if($this->run_first_time)
+            {
+                $storage .= "Puente{$this->instance} = [];\n"
+                    . "  "
+                ;
+
+                $this->run_first_time = false;
+            }
+
             $code .= "(function(jq) {\n"
                 . "  " //indentation
+                . $storage
                 . implode("\n  ", $this->code)
                 . "\n"
                 . "})(jQuery);\n"

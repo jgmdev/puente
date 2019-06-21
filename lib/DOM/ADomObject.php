@@ -13,16 +13,16 @@ namespace Puente\DOM;
 abstract class ADomObject
 {
     /**
-     * Owner where generated code will be assigned.
-     * @var \Puente\Puente
-     */
-    protected $owner = null;
-
-    /**
      * Name of DOM object.
      * @var string
      */
     protected $name = "";
+
+    /**
+     * Owner where generated code will be assigned.
+     * @var \Puente\Puente
+     */
+    protected $owner = null;
     
     public function __construct(string $name, \Puente\Puente $owner)
     {
@@ -137,6 +137,78 @@ abstract class ADomObject
         $this->owner->addCode("{$this->name}.$name=$value;");
 
         return $this;
+    }
+
+    /**
+     * Appends data fields to a data object that will be sent to a callback.
+     *
+     * @param string|array|object $data
+     * @param array $new_data
+     * 
+     * @return self
+     */
+    public function appendData(&$data, array $new_data): self
+    {
+        if(count($new_data) <= 0)
+        {
+            return $this;
+        }
+
+        if(is_string($data))
+        {
+            $data = trim($data);
+
+            if(substr($data, -1) == "}")
+            {
+                $data = substr_replace($data, "", -1);
+
+                foreach($new_data as $name => $value)
+                {
+                    $this->paramConvert($value);
+                    $data .= ", $name: $value";
+                }
+
+                if(substr($data, 0, 2) == "{,")
+                {
+                    $data = substr_replace($data, "{", 0, 2);
+                }
+
+                $data .= "}";
+            }
+            else
+            {
+                throw new \Exception("Invalid JSON Object.");
+            }
+        }
+        elseif(is_array($data))
+        {
+            foreach($new_data as $name => $value)
+            {
+                $this->paramConvert($value);
+                $data[$name] = $value;
+            }
+        }
+        elseif(is_object($data))
+        {
+            foreach($new_data as $name => $value)
+            {
+                $this->paramConvert($value);
+                $data->$name = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the name of the element we are working on, this can be
+     * an object or variable name.
+     *
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     /**
