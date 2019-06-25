@@ -175,6 +175,28 @@ class Window extends ADomObject
     }
 
     /**
+     * Remove focus from the current window.
+     *
+     * @return \Puente\DOM\Window
+     */
+    public function blur(): self
+    {
+        $this->callMethod("print");
+        return $this;
+    }
+
+    /**
+     * Sets focus to the current window. 
+     *
+     * @return \Puente\DOM\Window
+     */
+    public function focus(): self
+    {
+        $this->callMethod("print");
+        return $this;
+    }
+
+    /**
      * Calls a function after a specified number of milliseconds. This function 
      * will add a 'timeout' element to the $data object sent to the callback
      * that contains the variable name which holds the timer id.
@@ -283,6 +305,36 @@ class Window extends ADomObject
 
         $this->owner->puenteStorage()->removeVar($varname);
         
+        return $this;
+    }
+
+    /**
+     * Resizes a window to the specified width and height.
+     *
+     * @param integer $width
+     * @param integer $height
+     * 
+     * @return void
+     */
+    public function resizeTo(int $width, int $height): self
+    {
+        $this->callMethod("resizeTo", $width, $height);
+
+        return $this;
+    }
+
+    /**
+     * Moves a window's left and top edge to the specified coordinates.
+     *
+     * @param integer $width
+     * @param integer $height
+     * 
+     * @return void
+     */
+    public function moveTo(int $width, int $height): self
+    {
+        $this->callMethod("moveTo", $width, $height);
+
         return $this;
     }
 }
