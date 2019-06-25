@@ -643,6 +643,24 @@ class JQuery extends DOM\ADomObject
     }
 
     /**
+     * A function to execute when the DOM is fully loaded.
+     *
+     * @param callable $callback
+     * @param string|array|object $data The data you want on your callback
+     * as a json string or php array|object, eg: '{width: window.innerWidth}'
+     * 
+     * @return \Puente\JQuery
+     */
+    public function ready(callable $callback, $data="{}"): self
+    {
+        return $this->on(
+            "ready",
+            $callback,
+            $data
+        );
+    }
+
+    /**
      * Event called when the element is resized.
      *
      * @param callable $callback
