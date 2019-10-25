@@ -150,6 +150,9 @@ it to the returned address on your terminal which by default is:
 
 > http://localhost:8383
 
+## Showcase
+
+[BlueControl](https://github.com/jgmdev/bluecontrol) - php application that controls blue light on display and uses Puente to handle the configuration GUI dynamic events.
 
 ## Status
 
