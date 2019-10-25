@@ -13,15 +13,38 @@ namespace Puente;
  */
 class JQuery extends DOM\ADomObject
 {
+     /**
+     * Stores generated code if no owner is given.
+     * @var string
+     */
+    protected $code;
+
     /**
      * Constructor
      *
      * @param string $varname
      * @param \Puente\Puente $owner
      */
-    public function __construct(string $varname, Puente $owner)
+    public function __construct(string $varname, Puente $owner=null)
     {
         parent::__construct($varname, $owner);
+    }
+
+    /**
+     * Get an individual jquery instance that can be used on function calls.
+     *
+     * @param string $selector
+     * 
+     * @return JQuery
+     */
+    public static function jq(string $selector): JQuery
+    {
+        $util = new self("");
+        $util->paramConvert($selector);
+
+        $jquery = new self("jQuery($selector)");
+
+        return $jquery;
     }
 
     // Dom functions
@@ -34,9 +57,12 @@ class JQuery extends DOM\ADomObject
      * 
      * @return \Puente\JQuery
      */
-    public function attr(string $name, string $value): self
+    public function attr(string $name, string $value=""): self
     {
-        $this->callMethod("attr", $name, $value);
+        if($value)
+            $this->callMethod("attr", $name, $value);
+        else
+            $this->callMethod("attr", $name);
         
         return $this;
     }
@@ -60,11 +86,11 @@ class JQuery extends DOM\ADomObject
      * to attr this function allows you to change the internal DOM object
      * properties.
      *
-     * @param array $properties Eg: ["tagName" => "div"]
+     * @param array|string $properties Eg: ["tagName" => "div"]
      * 
      * @return \Puente\JQuery
      */
-    public function prop(array $properties): self
+    public function prop($properties): self
     {
         $this->callMethod("prop", $properties);
 
@@ -192,7 +218,10 @@ class JQuery extends DOM\ADomObject
      */
     public function remove(string $selector=""): self
     {
-        $this->callMethod("remove", $selector);
+        if($selector)
+            $this->callMethod("remove", $selector);
+        else
+            $this->callMethod("remove");
 
         return $this;
     }
@@ -205,6 +234,27 @@ class JQuery extends DOM\ADomObject
     public function empty(): JQuery
     {
         $this->callMethod("empty");
+        
+        return $this;
+    }
+
+    // Traversing methods
+
+    /**
+     * Get the parent of each element in the current set of matched elements, 
+     * optionally filtered by a selector.
+     *
+     * @param string $selector A string containing a selector expression to 
+     * match elements against.
+     * 
+     * @return \Puente\JQuery
+     */
+    public function parent(string $selector=""): self
+    {
+        if($selector)
+            $this->callMethod("parent", $selector);
+        else
+            $this->callMethod("parent");
         
         return $this;
     }

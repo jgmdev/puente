@@ -23,11 +23,18 @@ abstract class ADomObject
      * @var \Puente\Puente
      */
     protected $owner = null;
+
+    /**
+     * Stores generated code if no owner is given.
+     * @var string
+     */
+    protected $code;
     
-    public function __construct(string $name, \Puente\Puente $owner)
+    public function __construct(string $name, \Puente\Puente $owner=null)
     {
         $this->name = $name;
         $this->owner = $owner;
+        $this->code = "";
     }
 
     /**
@@ -108,11 +115,31 @@ abstract class ADomObject
             $args = rtrim($args, ", ");
         }
 
-        $this->owner->addCode(
-            "{$this->name}.$name("
-            . $args
-            . ");"
-        );
+        if($this->owner)
+        {
+            $this->owner->addCode(
+                "{$this->name}.$name("
+                . $args
+                . ");"
+            );
+        }
+        else
+        {
+            if($this->code)
+            {
+                $this->code .= ".$name("
+                    . $args
+                    . ")"
+                ;
+            }
+            else
+            {
+                $this->code .= "{$this->name}.$name("
+                    . $args
+                    . ")"
+                ;
+            }
+        }
 
         return $this;
     }
@@ -134,9 +161,44 @@ abstract class ADomObject
 
         $this->paramConvert($value);
 
-        $this->owner->addCode("{$this->name}.$name=$value;");
+        if($this->owner)
+        {
+            $this->owner->addCode("{$this->name}.$name=$value;");
+        }
+        else
+        {
+            if($this->code)
+            {
+                $this->code .= "; {$this->name}.$name=$value";
+            }
+            else
+            {
+                $this->code .= "{$this->name}.$name=$value";
+            }
+        }
 
         return $this;
+    }
+
+    /**
+     * Get generated code if object doesn't have an owner.
+     *
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return "js:".$this->code;
+    }
+
+    /**
+     * Get generated code if object doesn't have an owner including the ; at
+     * the end.
+     *
+     * @return string
+     */
+    public function getCodeEnded(): string
+    {
+        return "js:".$this->code . ";";
     }
 
     /**

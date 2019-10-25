@@ -206,6 +206,8 @@ class Puente
      *
      * @param string $selector A valid jQuery selector string or dom object
      * using the js: prefix, eg: "js:window", "js:document", etc...
+     * @param bool $recursive Generate code in a recursive calling way eg:
+     * object.method().method2(), otherwise each method call is 
      * 
      * @return JQuery
      */
@@ -332,7 +334,7 @@ class Puente
         $code = $parents["decl"]
             . "jq.ajax("
             . "{"
-            . "url: window.location.pathname, "
+            . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} "
@@ -396,7 +398,7 @@ class Puente
             . $parents["decl"]
             . "jq.ajax("
             . "{"
-            . "url: window.location.pathname, "
+            . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} "
@@ -460,7 +462,7 @@ class Puente
             . $parents["decl"]
             . "jq.ajax("
             . "{"
-            . "url: window.location.pathname, "
+            . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} id: '$id', "
