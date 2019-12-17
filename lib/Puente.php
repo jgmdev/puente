@@ -10,7 +10,7 @@ namespace Puente;
 /**
  * Serves as a proxy between PHP and jQuery for easier communication between
  * both. Also is in charge of generating the javascript code and listening
- * for events on the client browser, processing them and sending more javascript 
+ * for events on the client browser, processing them and sending more javascript
  * code to the client browser.
  */
 class Puente
@@ -72,7 +72,7 @@ class Puente
     }
 
     /**
-     * Starts a new buffer to store generated code. This is used when 
+     * Starts a new buffer to store generated code. This is used when
      * generating code inside callbacks.
      *
      * @return void
@@ -139,7 +139,8 @@ class Puente
         if($this->code_buffering)
         {
             return [
-                "decl" => "\nparents.push(parent_id);"
+                "decl" => "\nowner=this;"
+                    . "parents.push(parent_id);"
                     . "parents_data[parent_id] = parent_data;"
                     . "parent_id=$id;"
                     . "parent_data=$data;",
@@ -149,7 +150,8 @@ class Puente
         else
         {
             return [
-                "decl" => "\nvar parents=[];"
+                "decl" => "\nvar owner=this;"
+                    . "var parents=[];"
                     . "var parents_data=[];"
                     . "var parent_id=$id;"
                     . "var parent_data=$data;",
@@ -166,7 +168,7 @@ class Puente
      * function call.
      *
      * @param string $selector
-     * 
+     *
      * @return string
      */
     private function parseSelector(string $selector): string
@@ -179,10 +181,10 @@ class Puente
 
         return $selector = "'"
             . str_replace(
-                ["'", "\n"], 
-                ["\\'", "\\n"], 
+                ["'", "\n"],
+                ["\\'", "\\n"],
                 $selector
-            ) 
+            )
             . "'"
         ;
     }
@@ -191,7 +193,7 @@ class Puente
      * Logs in browser console the javascript code sent by callbacks.
      *
      * @param string $code
-     * 
+     *
      * @return \Puente\Puente
      */
     public function enableDebug(): self
@@ -207,13 +209,19 @@ class Puente
      * @param string $selector A valid jQuery selector string or dom object
      * using the js: prefix, eg: "js:window", "js:document", etc...
      * @param bool $recursive Generate code in a recursive calling way eg:
-     * object.method().method2(), otherwise each method call is 
-     * 
+     * object.method().method2(), otherwise each method call is
+     *
      * @return JQuery
      */
     public function jq(string $selector): JQuery
     {
         $selector_parsed = $this->parseSelector($selector);
+
+        if($selector == "js:this" && $this->code_buffering)
+        {
+            $selector .= $this->current_element;
+            $selector_parsed = "owner";
+        }
 
         if(!isset($this->elements[$selector]))
         {
@@ -224,7 +232,7 @@ class Puente
             );
 
             $this->addCode("var $varname = jq($selector_parsed);");
-            
+
             $this->elements[$selector] = [
                 "var" => $varname,
                 "object" => $jquery
@@ -234,7 +242,7 @@ class Puente
 
             return $jquery;
         }
-        
+
         return $this->elements[$selector]["object"];
     }
 
@@ -242,21 +250,47 @@ class Puente
      * Add hand crafted javascript code.
      *
      * @param string $code
-     * 
+     *
      * @return \Puente\Puente
      */
-    public function addCode(string $code): self
+    public function addCode(string $code, string $identifier=""): self
     {
         if(!$this->code_buffering)
         {
-            $this->code[] = $code;
+            if($identifier)
+                $this->code[$identifier] = $code;
+            else
+                $this->code[] = $code;
         }
         else
         {
-            $this->code_buffer[$this->code_buffer_level][] = $code;
+            if($identifier)
+                $this->code_buffer[$this->code_buffer_level][$identifier] = $code;
+            else
+                $this->code_buffer[$this->code_buffer_level][] = $code;
         }
 
         return $this;
+    }
+
+    /**
+     * Get hand crafted code stored with a specific identifier.
+     *
+     * @param string $code
+     *
+     * @return \Puente\Puente
+     */
+    public function getCode(string $identifier): string
+    {
+        if(!$this->code_buffering)
+        {
+            return $this->code[$identifier] ?? "";
+        }
+
+        return $this->code_buffer[$this->code_buffer_level][$identifier]
+            ??
+            ""
+        ;
     }
 
     /**
@@ -305,7 +339,7 @@ class Puente
      * @param string $type
      * @param callable $callback
      * @param string|array|object $data A valid json string or php array/object.
-     * 
+     *
      * @return void
      */
     public function addEvent(
@@ -366,9 +400,9 @@ class Puente
      * example: $("element").hide(10, {callback}) where {callback} gets replaced
      * with the actual generated callback code.
      * @param callable $callback
-     * @param string|array|object $data A valid json string or php array/pbject. 
+     * @param string|array|object $data A valid json string or php array/pbject.
      * For example: "{width: window.innerWidth}"
-     * 
+     *
      * @return \Puente\Puente
      */
     public function addEventCallback(
@@ -430,13 +464,18 @@ class Puente
      * @param string $varname Variable name of the element.
      * @param string $type Event type, eg: click, dblclick, etc...
      * @param callable $callback
-     * @param string|array|object $data A valid json string or php array/pbject. 
+     * @param string|array|object $data A valid json string or php array/pbject.
      * For example: "{width: window.innerWidth}"
-     * 
+     * @param string $identifier Chain the event to the given identifier.
+     *
      * @return \Puente\Puente
      */
     public function addElementEvent(
-        string $varname, string $type, callable $callback, $data="{}"
+        string $varname,
+        string $type,
+        callable $callback,
+        $data="{}",
+        string $identifier=""
     ): self
     {
         $id = $this->current_event;
@@ -458,7 +497,13 @@ class Puente
             $debug .= "console.log(data.code);";
         }
 
-        $code = "$varname.on('$type', function(event){"
+        $varname_include = $varname;
+        if($identifier)
+        {
+            $varname_include = "";
+        }
+
+        $code = "$varname_include.on('$type', function(event){"
             . $parents["decl"]
             . "jq.ajax("
             . "{"
@@ -482,7 +527,25 @@ class Puente
             . "});"
         ;
 
-        $this->addCode($code);
+        if(!$identifier)
+        {
+            $this->addCode($code);
+        }
+        else
+        {
+            $current_code = rtrim($this->getCode($identifier), ";");
+
+            if($current_code)
+            {
+                $current_code .= $code;
+            }
+            else
+            {
+                $current_code = $varname . $code;
+            }
+
+            $this->addCode($current_code, $identifier);
+        }
 
         return $this;
     }
@@ -495,8 +558,8 @@ class Puente
     public function listenRequest(): void
     {
         if(
-            isset($_REQUEST["puente"]) 
-            && 
+            isset($_REQUEST["puente"])
+            &&
             $_REQUEST["puente"] == $this->instance
         )
         {
@@ -506,7 +569,7 @@ class Puente
             ob_clean();
 
             header('Content-Type: application/json; charset=utf-8', true);
-            
+
             $data = [];
             $puente = $this;
 
@@ -521,7 +584,7 @@ class Puente
                     $puente->createBuffer();
 
                     $callback(
-                        $puente, 
+                        $puente,
                         $_REQUEST["data"]
                     );
 
@@ -560,7 +623,7 @@ class Puente
                             $callback = $this->events[$id];
 
                             $callback(
-                                $puente, 
+                                $puente,
                                 $_REQUEST["data"]
                             );
 

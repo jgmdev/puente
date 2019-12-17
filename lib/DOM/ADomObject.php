@@ -29,12 +29,19 @@ abstract class ADomObject
      * @var string
      */
     protected $code;
-    
+
+    /**
+     * Stores the jquery identifier instance.
+     * @var string
+     */
+    protected $identifier;
+
     public function __construct(string $name, \Puente\Puente $owner=null)
     {
         $this->name = $name;
         $this->owner = $owner;
         $this->code = "";
+        $this->identifier = "";
     }
 
     /**
@@ -42,7 +49,7 @@ abstract class ADomObject
      *
      * @param string $name
      * @param array $arguments
-     * 
+     *
      * @return self
      */
     public function __call(string $name, array $arguments): self
@@ -70,13 +77,13 @@ abstract class ADomObject
                 break;
             case 4:
                 $this->callMethod(
-                    $name, $arguments[0], $arguments[1], 
+                    $name, $arguments[0], $arguments[1],
                     $arguments[2], $arguments[3]
                 );
                 break;
             case 5:
                 $this->callMethod(
-                    $name, $arguments[0], $arguments[1], 
+                    $name, $arguments[0], $arguments[1],
                     $arguments[2], $arguments[3], $arguments[4]
                 );
                 break;
@@ -92,7 +99,7 @@ abstract class ADomObject
      *
      * @param string $name
      * @param array ...$arguments
-     * 
+     *
      * @return self
      */
     public function callMethod(string $name, ...$arguments): self
@@ -108,7 +115,7 @@ abstract class ADomObject
             foreach($arguments as $value)
             {
                 $this->paramConvert($value);
-                
+
                 $args .= $value . ", ";
             }
 
@@ -117,11 +124,38 @@ abstract class ADomObject
 
         if($this->owner)
         {
-            $this->owner->addCode(
-                "{$this->name}.$name("
-                . $args
-                . ");"
-            );
+            if(!$this->identifier)
+            {
+                $this->owner->addCode(
+                    "{$this->name}.$name("
+                    . $args
+                    . ");"
+                );
+            }
+            else
+            {
+                $current_code = rtrim(
+                    $this->owner->getCode($this->identifier),
+                    ";"
+                );
+
+                if($current_code)
+                {
+                    $current_code .= ".$name("
+                        . $args
+                        . ");"
+                    ;
+                }
+                else
+                {
+                    $current_code .= "{$this->name}.$name("
+                        . $args
+                        . ");"
+                    ;
+                }
+
+                $this->owner->addCode($current_code, $this->identifier);
+            }
         }
         else
         {
@@ -149,7 +183,7 @@ abstract class ADomObject
      *
      * @param string $name
      * @param string|array|object $value
-     * 
+     *
      * @return self
      */
     public function assignProperty(string $name, $value): self
@@ -206,7 +240,7 @@ abstract class ADomObject
      *
      * @param string|array|object $data
      * @param array $new_data
-     * 
+     *
      * @return self
      */
     public function appendData(&$data, array $new_data): self
@@ -282,7 +316,7 @@ abstract class ADomObject
      *
      * @param mixed $param Can be a php array/object, number or string with
      * optional js: prefix.
-     * 
+     *
      * @return void
      */
     public function paramConvert(&$param): void
@@ -304,10 +338,10 @@ abstract class ADomObject
 
             $param = "'"
                 . str_replace(
-                    ["'", "\n"], 
-                    ["\\'", "\\n"], 
+                    ["'", "\n"],
+                    ["\\'", "\\n"],
                     $param
-                ) 
+                )
                 . "'"
             ;
         }
@@ -327,17 +361,17 @@ abstract class ADomObject
      * Converts a parameter to a valid string.
      *
      * @param string $param
-     * 
+     *
      * @return void
      */
     public function paramToStr(string &$param): void
     {
         $param = "'"
             . str_replace(
-                ["'", "\n"], 
-                ["\\'", "\\n"], 
+                ["'", "\n"],
+                ["\\'", "\\n"],
                 $param
-            ) 
+            )
             . "'"
         ;
     }
@@ -346,11 +380,54 @@ abstract class ADomObject
      * Converts a parameter to a JSON object.
      *
      * @param mixed $param
-     * 
+     *
      * @return void
      */
     public function paramToJSON(&$param): void
     {
         $param = json_encode($param);
+    }
+
+    /**
+     * Generate call code chained, same jquery kind of syntax.
+     * Eg: $("selector").call1().call2().call3();
+     *
+     * @return bool True if chainable turned on or false if not.
+     */
+    public function toggleChainable(): bool
+    {
+        if(!$this->identifier)
+        {
+            $this->identifier = $this->generateIdentifier(10);
+            return true;
+        }
+
+        $this->identifier = "";
+
+        return false;
+    }
+
+    /**
+     * Generate unique identifier string.
+     *
+     * @return string
+     */
+    public function generateIdentifier($len): string
+    {
+        $text = "";
+
+        while(strlen($text) < $len)
+            $text .= str_replace(
+                array("\$", ".", "/"),
+                "",
+                crypt(uniqid((string)rand($len, intval($len*rand())), true))
+            );
+
+        if(strlen($text) > $len)
+        {
+            $text = substr($text, 0, $len);
+        }
+
+        return $text;
     }
 }
