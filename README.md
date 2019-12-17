@@ -1,11 +1,11 @@
 # Puente :bridge_at_night:
 
 **Puente** which is the spanish word for "*bridge*" (you can hear the
-pronunciation [here](https://www.howtopronounce.com/spanish/puente/)), is a 
-PHP library that facilitates the communication between your php code and 
-jQuery/JavaScript code. It serves as a jQuery wrapper that generates working 
-JavaScript code. It uses ajax functionality to send all registered browser 
-events back to php for server side processing, then it returns more JavaScript 
+pronunciation [here](https://www.howtopronounce.com/spanish/puente/)), is a
+PHP library that facilitates the communication between your php code and
+jQuery/JavaScript code. It serves as a jQuery wrapper that generates working
+JavaScript code. It uses ajax functionality to send all registered browser
+events back to php for server side processing, then it returns more JavaScript
 code to the client browser.
 
 ## Why?
@@ -67,7 +67,7 @@ you will be able to register a **PHP callback!**:
 
 ```php
 $puente->jq(".element")->click(function($puente, $data){
-    $puente->jq(".element")->text("Hello World!");
+    $puente->jq("js:this")->text("Hello World!");
 });
 ```
 
@@ -137,7 +137,7 @@ $code = $puente->getExecuteCode(); //Now you can decide what to do with it
 ## Examples
 
 To test the examples you will need PHP CLI to be installed and available on
-your system path, then open a terminal and inside the **puente** project folder 
+your system path, then open a terminal and inside the **puente** project folder
 do the following:
 
 ```sh
@@ -152,12 +152,14 @@ it to the returned address on your terminal which by default is:
 
 ## Showcase
 
-[BlueControl](https://github.com/jgmdev/bluecontrol) - php application that controls blue light on display and uses Puente to handle the configuration GUI dynamic events.
+[BlueControl](https://github.com/jgmdev/bluecontrol) - php application that
+controls blue light on display and uses Puente to handle the configuration
+GUI dynamic events.
 
 ## Status
 
 The library is still **under development** but it is already proving to be
-useful. Many stuff still needs to be added.
+useful. Many stuff could still be added.
 
 ## TODO
 
