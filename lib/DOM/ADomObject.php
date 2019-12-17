@@ -420,7 +420,10 @@ abstract class ADomObject
             $text .= str_replace(
                 array("\$", ".", "/"),
                 "",
-                crypt(uniqid((string)rand($len, intval($len*rand())), true))
+                crypt(
+                    uniqid((string)rand($len, intval($len*rand())), true),
+                    uniqid("", true)
+                )
             );
 
         if(strlen($text) > $len)
