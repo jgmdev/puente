@@ -132,7 +132,7 @@ class Puente
      *
      * @param int $id
      * @param string $data
-     * @return void
+     * @return array
      */
     private function getParents(int $id, string $data="{}"): array
     {
@@ -278,7 +278,7 @@ class Puente
      *
      * @param string $code
      *
-     * @return \Puente\Puente
+     * @return string
      */
     public function getCode(string $identifier): string
     {
@@ -340,7 +340,7 @@ class Puente
      * @param callable $callback
      * @param string|array|object $data A valid json string or php array/object.
      *
-     * @return void
+     * @return \Puente\Puente
      */
     public function addEvent(
         callable $callback, $data="{}"
@@ -575,7 +575,7 @@ class Puente
 
             if(isset($_REQUEST["id"]))
             {
-                $id = $_REQUEST["id"];
+                $id = intval($_REQUEST["id"]);
 
                 if(isset($this->events[$id]))
                 {

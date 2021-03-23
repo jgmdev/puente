@@ -23,9 +23,9 @@ class JQuery extends DOM\ADomObject
      * Constructor
      *
      * @param string $varname
-     * @param \Puente\Puente $owner
+     * @param ?\Puente\Puente $owner
      */
-    public function __construct(string $varname, Puente $owner=null)
+    public function __construct(string $varname, ?Puente $owner=null)
     {
         parent::__construct($varname, $owner);
 
@@ -811,14 +811,14 @@ class JQuery extends DOM\ADomObject
      *
      * @param string $effect Name of the jquery effect function.
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     private function runEffect(
-        string $effect, string $speed="", callable $callback=null, $data="{}"
+        string $effect, string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         $speed = $speed === "" ? "fast" : $speed;
@@ -844,14 +844,14 @@ class JQuery extends DOM\ADomObject
      * Hides the element on the browser.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function hide(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("hide", $speed, $callback, $data);
@@ -861,14 +861,14 @@ class JQuery extends DOM\ADomObject
      * Shows the element on the browser.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function show(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("show", $speed, $callback, $data);
@@ -878,14 +878,14 @@ class JQuery extends DOM\ADomObject
      * Toggles between show/hide.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function toggle(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("toggle", $speed, $callback, $data);
@@ -895,14 +895,14 @@ class JQuery extends DOM\ADomObject
      * Gradually increases the opacity of the element until it is fully visible.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function fadeIn(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("fadeIn", $speed, $callback, $data);
@@ -912,14 +912,14 @@ class JQuery extends DOM\ADomObject
      * Gradually decreases the opacity of the element until it is fully hidden.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function fadeOut(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("fadeOut", $speed, $callback, $data);
@@ -929,14 +929,14 @@ class JQuery extends DOM\ADomObject
      * Toggles between fadeIn and fadeOut.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function fadeToggle(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("fadeToggle", $speed, $callback, $data);
@@ -947,14 +947,14 @@ class JQuery extends DOM\ADomObject
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
      * @param float $to Level of opacity
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function fadeTo(
-        string $speed, float $to, callable $callback=null, $data="{}"
+        string $speed, float $to, ?callable $callback=null, $data="{}"
     ): self
     {
         $speed = $speed === "" ? "fast" : $speed;
@@ -982,14 +982,14 @@ class JQuery extends DOM\ADomObject
      * Gradually expands an element until it is visible.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function slideDown(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("slideDown", $speed, $callback, $data);
@@ -999,14 +999,14 @@ class JQuery extends DOM\ADomObject
      * Gradually unexpands an element until it is hidden.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function slideUp(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("slideUp", $speed, $callback, $data);
@@ -1016,14 +1016,14 @@ class JQuery extends DOM\ADomObject
      * Toggles between slideDown/slideUp.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function slideToggle(
-        string $speed="", callable $callback=null, $data="{}"
+        string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         return $this->runEffect("slideToggle", $speed, $callback, $data);
@@ -1034,14 +1034,14 @@ class JQuery extends DOM\ADomObject
      * desired animation effect.
      *
      * @param string $speed Can be: fast, slow or milliseconds amount.
-     * @param callable $callback
+     * @param ?callable $callback
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
      *
      * @return \Puente\JQuery
      */
     public function animate(
-        array $css, string $speed="", callable $callback=null, $data="{}"
+        array $css, string $speed="", ?callable $callback=null, $data="{}"
     ): self
     {
         $speed = $speed === "" ? "fast" : $speed;

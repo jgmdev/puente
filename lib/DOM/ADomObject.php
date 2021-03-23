@@ -20,7 +20,7 @@ abstract class ADomObject
 
     /**
      * Owner where generated code will be assigned.
-     * @var \Puente\Puente
+     * @var ?\Puente\Puente
      */
     protected $owner = null;
 
@@ -36,7 +36,7 @@ abstract class ADomObject
      */
     protected $identifier;
 
-    public function __construct(string $name, \Puente\Puente $owner=null)
+    public function __construct(string $name, ?\Puente\Puente $owner=null)
     {
         $this->name = $name;
         $this->owner = $owner;

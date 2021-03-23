@@ -23,7 +23,7 @@ class Window extends ADomObject
      * @var \Puente\DOM\Location
      */
     private $location;
-    
+
     /**
      * Constructor
      *
@@ -41,7 +41,7 @@ class Window extends ADomObject
     }
 
     /**
-     * Gives you access to the browser console which provides methods 
+     * Gives you access to the browser console which provides methods
      * for logging information to the browser's console
      *
      * @return \Puente\DOM\Console
@@ -53,7 +53,7 @@ class Window extends ADomObject
 
     /**
      * Gives you access to the location object.
-     * 
+     *
      * @return \Puente\DOM\Location
      */
     public function location(): Location
@@ -65,7 +65,7 @@ class Window extends ADomObject
      * Display an alert dialog box.
      *
      * @param string $message
-     * 
+     *
      * @return \Puente\DOM\Window
      */
     public function alert(string $message): self
@@ -80,7 +80,7 @@ class Window extends ADomObject
      *
      * @param string $message
      * @param callable $callback function(Puente\Puente, array{"confirm" => bool})
-     * 
+     *
      * @return \Puente\DOM\Window
      */
     public function confirm(string $message, callable $callback): self
@@ -90,7 +90,7 @@ class Window extends ADomObject
         $this->owner->addCode("var output = confirm($message);");
 
         $this->owner->addEvent($callback, '{"confirm": output}');
-        
+
         return $this;
     }
 
@@ -99,9 +99,9 @@ class Window extends ADomObject
      *
      * @param string $message
      * @param callable $callback function(Puente\Puente, array{"input" => string})
-     * @param string $default_value The default value of the prompt displayed 
+     * @param string $default_value The default value of the prompt displayed
      * to the user.
-     * 
+     *
      * @return \Puente\DOM\Window
      */
     public function prompt(
@@ -116,7 +116,7 @@ class Window extends ADomObject
         );
 
         $this->owner->addEvent($callback, '{"input": input}');
-        
+
         return $this;
     }
 
@@ -128,8 +128,8 @@ class Window extends ADomObject
      * @param string $target Can be _blank, _parent, _self or _top.
      * @param string $varname An explicit name for the variable that will store
      * the new opened window.
-     * 
-     * @return \Puente\Window Reference to newly created window.
+     *
+     * @return \Puente\DOM\Window Reference to newly created window.
      */
     public function open(
         string $url, string $target="_blank", string $varname=""
@@ -147,7 +147,7 @@ class Window extends ADomObject
         $this->owner->puenteStorage()->insertVar($varname);
 
         $new_window = new self($this->owner, $varname);
-        
+
         return $new_window;
     }
 
@@ -163,7 +163,7 @@ class Window extends ADomObject
     }
 
     /**
-     * Opens the Print Dialog Box, which lets the user select preferred 
+     * Opens the Print Dialog Box, which lets the user select preferred
      * printing options to print the content of the current window.
      *
      * @return \Puente\DOM\Window
@@ -186,7 +186,7 @@ class Window extends ADomObject
     }
 
     /**
-     * Sets focus to the current window. 
+     * Sets focus to the current window.
      *
      * @return \Puente\DOM\Window
      */
@@ -197,7 +197,7 @@ class Window extends ADomObject
     }
 
     /**
-     * Calls a function after a specified number of milliseconds. This function 
+     * Calls a function after a specified number of milliseconds. This function
      * will add a 'timeout' element to the $data object sent to the callback
      * that contains the variable name which holds the timer id.
      *
@@ -207,8 +207,8 @@ class Window extends ADomObject
      * the timer id, if empty it will generate one for you.
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
-     * 
-     * @return \Puente\Window
+     *
+     * @return \Puente\DOM\Window
      */
     public function setTimeout(
         callable $callback, int $milliseconds=0, string $varname="", $data="{}"
@@ -217,7 +217,7 @@ class Window extends ADomObject
         $varname = $varname == "" ? uniqid("timeout") : $varname;
 
         $this->appendData($data, ["timeout" => $varname]);
-        
+
         $this->owner->addEventCallback(
             "var $varname = {$this->name}.setTimeout("
                 . "{callback}, $milliseconds"
@@ -227,12 +227,12 @@ class Window extends ADomObject
         );
 
         $this->owner->puenteStorage()->insertVar($varname);
-        
+
         return $this;
     }
 
     /**
-     * Calls a function at specified intervals in milliseconds. This function 
+     * Calls a function at specified intervals in milliseconds. This function
      * will add an 'interval' element to the $data object sent to the callback
      * that contains the variable name whichs holds timer id, this way
      * you can use clearInterval from within the callback in case you want
@@ -244,8 +244,8 @@ class Window extends ADomObject
      * the timer id, if empty it will generate one for you.
      * @param string|array|object $data The data you want on your callback
      * as a json string or php array|object, eg: '{width: window.innerWidth}'
-     * 
-     * @return \Puente\Window
+     *
+     * @return \Puente\DOM\Window
      */
     public function setInterval(
         callable $callback, int $milliseconds=0, string $varname="", $data="{}"
@@ -254,7 +254,7 @@ class Window extends ADomObject
         $varname = $varname == "" ? uniqid("interval") : $varname;
 
         $this->appendData($data, ["interval" => $varname]);
-        
+
         $this->owner->addEventCallback(
             "var $varname = {$this->name}.setInterval("
                 . "{callback}, $milliseconds"
@@ -264,7 +264,7 @@ class Window extends ADomObject
         );
 
         $this->owner->puenteStorage()->insertVar($varname);
-        
+
         return $this;
     }
 
@@ -272,8 +272,8 @@ class Window extends ADomObject
      * Stops a timer started with setTimeout().
      *
      * $param string $varname
-     * 
-     * @return \Puente\Window
+     *
+     * @return \Puente\DOM\Window
      */
     public function clearTimeout(string $varname): self
     {
@@ -284,7 +284,7 @@ class Window extends ADomObject
         );
 
         $this->owner->puenteStorage()->removeVar($varname);
-        
+
         return $this;
     }
 
@@ -292,8 +292,8 @@ class Window extends ADomObject
      * Stops a timer started with setInterval().
      *
      * $param string $varname
-     * 
-     * @return \Puente\Window
+     *
+     * @return \Puente\DOM\Window
      */
     public function clearInterval(string $varname): self
     {
@@ -304,7 +304,7 @@ class Window extends ADomObject
         );
 
         $this->owner->puenteStorage()->removeVar($varname);
-        
+
         return $this;
     }
 
@@ -313,8 +313,8 @@ class Window extends ADomObject
      *
      * @param integer $width
      * @param integer $height
-     * 
-     * @return void
+     *
+     * @return \Puente\DOM\Window
      */
     public function resizeTo(int $width, int $height): self
     {
@@ -328,8 +328,8 @@ class Window extends ADomObject
      *
      * @param integer $width
      * @param integer $height
-     * 
-     * @return void
+     *
+     * @return \Puente\DOM\Window
      */
     public function moveTo(int $width, int $height): self
     {
