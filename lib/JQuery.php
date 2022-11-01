@@ -13,7 +13,7 @@ namespace Puente;
  */
 class JQuery extends DOM\ADomObject
 {
-     /**
+    /**
      * Stores generated code if no owner is given.
      * @var string
      */
@@ -257,6 +257,41 @@ class JQuery extends DOM\ADomObject
             $this->callMethod("parent", $selector);
         else
             $this->callMethod("parent");
+
+        return $this;
+    }
+
+    /**
+     * Get the descendants of each element in the current set of matched
+     * elements, filtered by a selector.
+     *
+     * @param string $selector A string containing a selector expression to
+     * match elements against.
+     *
+     * @return \Puente\JQuery
+     */
+    public function find(string $selector): self
+    {
+        $this->callMethod("find", $selector);
+
+        return $this;
+    }
+
+    /**
+     * Get the children of each element in the set of matched elements,
+     * optionally filtered by a selector.
+     *
+     * @param string $selector A string containing a selector expression to
+     * match elements against.
+     *
+     * @return \Puente\JQuery
+     */
+    public function children(string $selector=""): self
+    {
+        if($selector)
+            $this->callMethod("children", $selector);
+        else
+            $this->callMethod("children");
 
         return $this;
     }

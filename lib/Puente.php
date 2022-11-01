@@ -368,6 +368,7 @@ class Puente
         $code = $parents["decl"]
             . "jq.ajax("
             . "{"
+            . "type: 'POST', "
             . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
@@ -432,6 +433,7 @@ class Puente
             . $parents["decl"]
             . "jq.ajax("
             . "{"
+            . "type: 'POST', "
             . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
@@ -505,8 +507,10 @@ class Puente
 
         $code = "$varname_include.on('$type', function(event){"
             . $parents["decl"]
+            . "event.preventDefault();"
             . "jq.ajax("
             . "{"
+            . "type: 'POST', "
             . "url: window.location.href, "
             . "dataType: 'json', "
             . "data: {"
@@ -558,9 +562,9 @@ class Puente
     public function listenRequest(): void
     {
         if(
-            isset($_REQUEST["puente"])
+            isset($_POST["puente"])
             &&
-            $_REQUEST["puente"] == $this->instance
+            $_POST["puente"] == $this->instance
         )
         {
             // This only works if output buffering is enabled with ob_start(),
@@ -573,9 +577,9 @@ class Puente
             $data = [];
             $puente = $this;
 
-            if(isset($_REQUEST["id"]))
+            if(isset($_POST["id"]))
             {
-                $id = intval($_REQUEST["id"]);
+                $id = intval($_POST["id"]);
 
                 if(isset($this->events[$id]))
                 {
@@ -585,7 +589,7 @@ class Puente
 
                     $callback(
                         $puente,
-                        $_REQUEST["data"]
+                        $_POST["data"]
                     );
 
                     $data["code"] = $puente->getPlainCode();
@@ -594,21 +598,21 @@ class Puente
                 }
                 else
                 {
-                    if(isset($_REQUEST["parents"]))
+                    if(isset($_POST["parents"]))
                     {
                         $puente->createBuffer();
 
-                        foreach($_REQUEST["parents"] as $parent)
+                        foreach($_POST["parents"] as $parent)
                         {
                             $data = [];
 
                             if(
-                                isset($_REQUEST["parents_data"])
+                                isset($_POST["parents_data"])
                                 &&
-                                isset($_REQUEST["parents_data"][$parent])
+                                isset($_POST["parents_data"][$parent])
                             )
                             {
-                                $data = $_REQUEST["parents_data"][$parent];
+                                $data = $_POST["parents_data"][$parent];
                             }
 
                             $this->events[$parent](
@@ -624,7 +628,7 @@ class Puente
 
                             $callback(
                                 $puente,
-                                $_REQUEST["data"]
+                                $_POST["data"]
                             );
 
                             $data["code"] = $puente->getPlainCode();
