@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * @author Jefferson González
  * @license MIT
  * @link https://github.com/jgmdev/puente Source code.

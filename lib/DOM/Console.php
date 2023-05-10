@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * @author Jefferson González
  * @license MIT
  * @link https://github.com/jgmdev/puente Source code.
@@ -12,7 +12,7 @@ namespace Puente\DOM;
  * debugging messages into the browser console.
  */
 class Console extends ADomObject
-{   
+{
     /**
      * Constructor.
      *
@@ -28,11 +28,11 @@ class Console extends ADomObject
     /**
      * Writes an assert message to console.
      *
-     * @param string|array|object $element A string representing a javascript 
+     * @param string|array|object $element A string representing a javascript
      * object or php array of associative elements, for example:
      * [["name" => "john", age => 10], ["name" => "Smith", age => 4]].
      * @param string $message The message to display with the element.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function assert(
@@ -58,7 +58,7 @@ class Console extends ADomObject
 
     /**
      * Writes an error message to the console.
-     * 
+     *
      * @param string $message The message to write.
      *
      * @return \Puente\DOM\Console
@@ -74,7 +74,7 @@ class Console extends ADomObject
      * Writes a message to the console
      *
      * @param string $message The message or object to write.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function info(string $message): self
@@ -88,7 +88,7 @@ class Console extends ADomObject
      * Writes a message to the console
      *
      * @param string $message The message or object to write.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function log(string $message): self
@@ -102,7 +102,7 @@ class Console extends ADomObject
      * Writes a warning message to the console.
      *
      * @param string $message The message or object to write.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function warn(string $message): self
@@ -113,7 +113,7 @@ class Console extends ADomObject
     }
 
     /**
-     * Clears the debugging console. and writes a message in the console: 
+     * Clears the debugging console. and writes a message in the console:
      * "Console was cleared".
      *
      * @return \Puente\DOM\Console
@@ -126,10 +126,10 @@ class Console extends ADomObject
     }
 
     /**
-     * Writes to the console the number of times that particular console.count() 
+     * Writes to the console the number of times that particular console.count()
      * is called. You can add a label that will be included in the console view.
-     * 
-     * @param string $label If set the method counts the number of times 
+     *
+     * @param string $label If set the method counts the number of times
      * console.count() has been called with this label.
      *
      * @return \Puente\DOM\Console
@@ -142,18 +142,18 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("count");   
+            $this->callMethod("count");
         }
 
         return $this;
     }
 
     /**
-     * Indicates the start of a message group. All messages will from now on 
+     * Indicates the start of a message group. All messages will from now on
      * be written inside this group.
      *
      * @param string $label If set the messages are grouped by the given label.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function group(string $label=""): self
@@ -164,7 +164,7 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("group");   
+            $this->callMethod("group");
         }
 
         return $this;
@@ -174,7 +174,7 @@ class Console extends ADomObject
      * Same as group but the user will need to uncollapse messages to read them.
      *
      * @param string $label If set the messages are grouped by the given label.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function groupCollapsed(string $label=""): self
@@ -185,7 +185,7 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("groupCollapsed");   
+            $this->callMethod("groupCollapsed");
         }
 
         return $this;
@@ -206,12 +206,12 @@ class Console extends ADomObject
     /**
      * Writes a table to the console
      *
-     * @param string|array $element A string representing a javascript object 
+     * @param string|array $element A string representing a javascript object
      * or php array of associative elements, for example:
      * [["name" => "john", age => 10], ["name" => "Smith", age => 4]].
      * @param array $columnNames Array of the columns to display, for example:
      * ["age"] which will display only the age column.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function table(
@@ -239,7 +239,7 @@ class Console extends ADomObject
      * Starts a timer that counts the amount of time since started.
      *
      * @param string $label If set the timer is identified as label.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function time(string $label=""): self
@@ -250,7 +250,7 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("time");   
+            $this->callMethod("time");
         }
 
         return $this;
@@ -260,7 +260,7 @@ class Console extends ADomObject
      * Ends a timer and write the total amount of time on the console.
      *
      * @param string $label If set the timer is identified as label.
-     * 
+     *
      * @return \Puente\DOM\Console
      */
     public function timeEnd(string $label=""): self
@@ -271,7 +271,7 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("timeEnd");   
+            $this->callMethod("timeEnd");
         }
 
         return $this;
@@ -279,7 +279,7 @@ class Console extends ADomObject
 
     /**
      * Displays a trace that show how the code ended before calling.
-     * 
+     *
      * @param string $label If set the trace is identified as the given label.
      *
      * @return \Puente\DOM\Console
@@ -292,7 +292,7 @@ class Console extends ADomObject
         }
         else
         {
-            $this->callMethod("trace");   
+            $this->callMethod("trace");
         }
 
         return $this;

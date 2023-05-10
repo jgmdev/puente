@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * @author Jefferson González
  * @license MIT
  * @link https://github.com/jgmdev/puente Source code.
@@ -12,7 +12,7 @@ namespace Puente\DOM;
  * data inside the user browser.
  */
 class LocalStorage extends ADomObject
-{   
+{
     /**
      * Constructor.
      *
@@ -28,13 +28,13 @@ class LocalStorage extends ADomObject
      *
      * @param string $name
      * @param string $value
-     * 
+     *
      * @return \Puente\DOM\LocalStorage
      */
     public function setItem(string $name, string $value): self
     {
         $this->callMethod("setItem", $name, $value);
-        
+
         return $this;
     }
 
@@ -42,25 +42,25 @@ class LocalStorage extends ADomObject
      * Removes the specified local storage item.
      *
      * @param string $name
-     * 
+     *
      * @return \Puente\DOM\LocalStorage
      */
     public function removeItem(string $name): self
     {
         $this->callMethod("removeItem", $name);
-        
+
         return $this;
     }
 
     /**
      * Remove all local storage items.
-     * 
+     *
      * @return \Puente\DOM\LocalStorage
      */
     public function clear(): self
     {
         $this->callMethod("clear");
-        
+
         return $this;
     }
 }

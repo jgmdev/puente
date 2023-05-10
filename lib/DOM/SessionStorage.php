@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * @author Jefferson González
  * @license MIT
  * @link https://github.com/jgmdev/puente Source code.
@@ -14,7 +14,7 @@ namespace Puente\DOM;
  * the window is closed the data is destroyed.
  */
 class SessionStorage extends LocalStorage
-{   
+{
     /**
      * Constructor.
      *
