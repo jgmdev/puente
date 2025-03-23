@@ -27,6 +27,7 @@ class Puente
     private $instance = 0;
     private $run_first_time = true;
     private $debug_mode = false;
+    private $post_url = "";
 
     private static $next_instance = 1;
 
@@ -56,11 +57,15 @@ class Puente
 
     /**
      * Constructor
+     * @param string $post_url If set, uses this url to send client events
+     * instead of using window.location.href.
      */
-    public function __construct()
+    public function __construct(string $post_url="")
     {
         $this->instance = self::$next_instance;
         self::$next_instance++;
+
+        $this->post_url = $post_url;
 
         $this->window = new DOM\Window($this);
 
@@ -69,6 +74,14 @@ class Puente
         $this->session_storage = new DOM\SessionStorage($this);
 
         $this->puente_storage = new DOM\PuenteStorage($this);
+    }
+
+    private function getPostLocation(): string
+    {
+        if($this->post_url)
+            return '"' . $this->post_url . '"';
+        else
+            return "window.location.href";
     }
 
     /**
@@ -192,8 +205,6 @@ class Puente
     /**
      * Logs in browser console the javascript code sent by callbacks.
      *
-     * @param string $code
-     *
      * @return \Puente\Puente
      */
     public function enableDebug(): self
@@ -208,8 +219,6 @@ class Puente
      *
      * @param string $selector A valid jQuery selector string or dom object
      * using the js: prefix, eg: "js:window", "js:document", etc...
-     * @param bool $recursive Generate code in a recursive calling way eg:
-     * object.method().method2(), otherwise each method call is
      *
      * @return JQuery
      */
@@ -250,6 +259,7 @@ class Puente
      * Add hand crafted javascript code.
      *
      * @param string $code
+     * @param string $identifier
      *
      * @return \Puente\Puente
      */
@@ -336,7 +346,6 @@ class Puente
     /**
      * Generates an ajax callback back to the server.
      *
-     * @param string $type
      * @param callable $callback
      * @param string|array|object $data A valid json string or php array/object.
      *
@@ -369,7 +378,7 @@ class Puente
             . "jq.ajax("
             . "{"
             . "type: 'POST', "
-            . "url: window.location.href, "
+            . "url: ".$this->getPostLocation().", "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} "
@@ -434,7 +443,7 @@ class Puente
             . "jq.ajax("
             . "{"
             . "type: 'POST', "
-            . "url: window.location.href, "
+            . "url: ".$this->getPostLocation().", "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} "
@@ -511,7 +520,7 @@ class Puente
             . "jq.ajax("
             . "{"
             . "type: 'POST', "
-            . "url: window.location.href, "
+            . "url: ".$this->getPostLocation().", "
             . "dataType: 'json', "
             . "data: {"
             . "puente: $instance, {$parents['call']} id: '$id', "
@@ -589,7 +598,7 @@ class Puente
 
                     $callback(
                         $puente,
-                        $_POST["data"]
+                        $_POST["data"] ?? array()
                     );
 
                     $data["code"] = $puente->getPlainCode();
@@ -628,7 +637,7 @@ class Puente
 
                             $callback(
                                 $puente,
-                                $_POST["data"]
+                                $_POST["data"] ?? array()
                             );
 
                             $data["code"] = $puente->getPlainCode();

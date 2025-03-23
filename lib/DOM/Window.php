@@ -271,7 +271,7 @@ class Window extends ADomObject
     /**
      * Stops a timer started with setTimeout().
      *
-     * $param string $varname
+     * @param string $varname
      *
      * @return \Puente\DOM\Window
      */
@@ -291,7 +291,7 @@ class Window extends ADomObject
     /**
      * Stops a timer started with setInterval().
      *
-     * $param string $varname
+     * @param string $varname
      *
      * @return \Puente\DOM\Window
      */
